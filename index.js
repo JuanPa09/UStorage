@@ -13,7 +13,7 @@ app.use(cors())
 
 app.get('/' , (req , res)=>{
 
-   res.send(`Hostname: ${hostname}`)
+   res.send(`Hola desde ${hostname}`)
 
 })
 
