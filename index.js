@@ -17,6 +17,10 @@ app.get('/' , (req , res)=>{
 
 })
 
+app.get('/saludo',(req,res)=>{
+    res.send(`Hola mundo desde ${hostname}`)
+})
+
 app.listen(port,()=>{
     console.log('Corriendo en el puerto ' + port)
 })
