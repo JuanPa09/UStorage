@@ -20,13 +20,13 @@ async function uploadFileToAws(file){
           });
         switch(mimetype.split('/')[1]){
             case 'pdf':
-                type = 1;
-                break;
-            case 'plain':
                 type = 2;
                 break;
+            case 'plain':
+                type = 3;
+                break;
             default:
-                type = 0;
+                type = 1;
                 break;
         };
         return {fileUrl: res.Location, key: res.Key, type: type};

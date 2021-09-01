@@ -32,7 +32,7 @@ exports.getUsers = async(req,res,next)=>{
             res.send(usuarios)
         })
     }catch(error){
-        return next(error)
+        return res.send({status: 404, msg: error})
     }
 }
 

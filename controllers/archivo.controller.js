@@ -135,7 +135,7 @@ exports.delete = async(req,res)=>{
 /**
  * 
  * @param {id,name,visibility,token,password} req 
- * @param {*} res 
+ * @param {status,msg} res 
  * @returns 
  */
 exports.update = async (req,res)=>{
@@ -233,7 +233,7 @@ exports.myFiles = async (req,res)=>{
     const token = req.query.token
 
     try{
-        sql.query(`Select f.name, f.link, f.id_file_type From User u, Files fs, File f where u.token = '${token}' 
+        sql.query(`Select f.name, f.link, f.id_file_type, f.id_visibility From User u, Files fs, File f where u.token = '${token}' 
         and u.id_user = fs.id_user and fs.id_file = f.id_file;`,(err,result)=>{
                 if(err)
                     return res.send({status:404, msg:err})
