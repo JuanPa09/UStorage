@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState } from "react";
 import classnames from "classnames";
 import ReactDatetime from "react-datetime";
 
@@ -43,14 +43,22 @@ import {
 // core components
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
 import Footer from "components/Footer/Footer.js";
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { css } from "glamor";
 
 export default function RegisterPage() {
   const [squares1to6, setSquares1to6] = React.useState("");
   const [squares7and8, setSquares7and8] = React.useState("");
   const [nickNameFocus, setnickNameFocus] = React.useState(false);
+  const [nicknameinput, setnicknameinput] = useState('');
   const [emailFocus, setEmailFocus] = React.useState(false);
+  const [emailinput, setemailinput] = useState('');
   const [passwordFocus, setPasswordFocus] = React.useState(false);
+  const [passwordinput, setpasswordinput] = useState('');
   const [confirmPasswordFocus, setConfirmPasswordFocus] = React.useState(false);
+  const [confirmPasswordinput, setconfirmPasswordinput] = useState('');
   const [fullNameFocus, setFullNameFocus] = React.useState(false);
   const [dateOfbFocus, setdateOfbFocus] = React.useState(false);
   React.useEffect(() => {
@@ -87,7 +95,6 @@ export default function RegisterPage() {
   };
 
   function previsualizacion(e) {
-    console.log(e);
     let reader = new FileReader();
     reader.onload = function () {
       let preview = document.getElementById('preview');
@@ -99,6 +106,75 @@ export default function RegisterPage() {
 
   function image() {
     document.getElementById("file").click();
+  }
+
+  function verificacion() {
+    let preview = document.getElementById('preview');
+    if (nicknameinput == '') {
+      tastWarning("Campo nombre de usuario vacio.");
+    } else if (emailinput == '') {
+      tastWarning("Campo correo electronico vacio.");
+    } else if (passwordinput == '') {
+      tastWarning("Campo contraseña vacio.");
+    } else if (confirmPasswordinput == '') {
+      tastWarning("Campo confirmar contraseña vacio.");
+    } else if (!preview.src) {
+      tastWarning("Selecciona foto de perfil.");
+    } else if (passwordinput != confirmPasswordinput) {
+      tastWarning("Campo contraseña no es igual a confirmar contraseña.");
+    } else {
+      /*var files = document.getElementById('file').files;
+      console.log(files[0]);*/
+      var file = document.getElementById('file').files[0];
+      /*console.log("File: ", file);
+      const formData = new FormData()
+      let body = {
+        username: nicknameinput,
+        mail: emailinput,
+        password: passwordinput
+      };
+      formData.append("body", body);
+      formData.append("image", file);
+      console.log(formData);*/
+      /*axios.post('http://localhost:3000/usuario/registrar', formData).then(data => {
+        console.log(data);
+      }).catch((error) => {
+        console.log(error)
+      })*/
+      var bodyFormData = new FormData();
+      bodyFormData.append('username', nicknameinput);
+      bodyFormData.append('mail', emailinput);
+      bodyFormData.append('password', passwordinput);
+      bodyFormData.append('image', file);
+      axios({
+        method: "post",
+        url: "http://localhost:3000/usuario/registrar",
+        data: bodyFormData,
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
+    }
+
+  }
+
+  function tastWarning(message) {
+    toast.warn(message, {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      containerId: 'warn'
+    });
   }
 
   return (
@@ -131,7 +207,6 @@ export default function RegisterPage() {
                       <img
                         alt="..."
                         className="img-fluid rounded shadow-lg"
-                        src={require("assets/img/lora.jpg").default}
                         style={{ width: "150px", marginTop: "-16%", marginLeft: "64%", display: "none" }}
                         id="preview"
                       />
@@ -155,6 +230,8 @@ export default function RegisterPage() {
                                 type="text"
                                 onFocus={(e) => setnickNameFocus(true)}
                                 onBlur={(e) => setnickNameFocus(false)}
+                                value={nicknameinput}
+                                onChange={event => setnicknameinput(event.target.value)}
                               />
                             </InputGroup>
                           </Col>
@@ -174,6 +251,8 @@ export default function RegisterPage() {
                                 type="text"
                                 onFocus={(e) => setEmailFocus(true)}
                                 onBlur={(e) => setEmailFocus(false)}
+                                value={emailinput}
+                                onChange={event => setemailinput(event.target.value)}
                               />
                             </InputGroup>
                           </Col>
@@ -195,6 +274,8 @@ export default function RegisterPage() {
                                 type="password"
                                 onFocus={(e) => setPasswordFocus(true)}
                                 onBlur={(e) => setPasswordFocus(false)}
+                                value={passwordinput}
+                                onChange={event => setpasswordinput(event.target.value)}
                               />
                             </InputGroup>
                           </Col>
@@ -214,6 +295,8 @@ export default function RegisterPage() {
                                 type="password"
                                 onFocus={(e) => setConfirmPasswordFocus(true)}
                                 onBlur={(e) => setConfirmPasswordFocus(false)}
+                                value={confirmPasswordinput}
+                                onChange={event => setconfirmPasswordinput(event.target.value)}
                               />
                             </InputGroup>
                           </Col>
@@ -223,21 +306,21 @@ export default function RegisterPage() {
                           <Col>
                             <InputGroup
                             >
-                              <Button color="warning" onClick={image} style={{width: "100%"}}>
+                              <Button color="warning" onClick={image} style={{ width: "100%" }}>
                                 Seleccionar foto de perfil
                               </Button>
-                              
+
                               <input type="file" id="file" accept="image/*" style={{ width: "100%", display: "none" }} onChange={event => previsualizacion(event)} ></input>
                             </InputGroup>
                           </Col>
                           <Col>
-                          
+
                           </Col>
                         </div>
                       </Form>
                     </CardBody>
                     <CardFooter>
-                      <Button className="btn-round" color="primary" size="lg">
+                      <Button className="btn-round" color="primary" size="lg" onClick={verificacion}>
                         Empezar
                       </Button>
                     </CardFooter>
@@ -278,6 +361,33 @@ export default function RegisterPage() {
             </Container>
           </div>
         </div>
+        <ToastContainer
+          enableMultiContainer
+          containerId={'warn'}
+          position="bottom-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          toastStyle={{ backgroundColor: "crimson", color: "#FFF" }}
+        />
+        <ToastContainer
+          enableMultiContainer
+          containerId={'sus'}
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Footer />
       </div>
     </>

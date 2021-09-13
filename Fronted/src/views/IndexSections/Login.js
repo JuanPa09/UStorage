@@ -116,7 +116,7 @@ export default function Signup() {
                                     <FormGroup check className="text-left">
                                         <Label check>
                                             <Input type="checkbox" />
-                                            <span className="form-check-sign" />Remember me{" "}
+                                            <span className="form-check-sign" />Recuérdame{" "}
                                             <a href="" onClick={(e) => e.preventDefault()}>
 
                                             </a>

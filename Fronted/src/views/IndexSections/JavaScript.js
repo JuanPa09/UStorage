@@ -246,7 +246,7 @@ export default function JavaScript() {
                   <Label check>
                     <Input defaultChecked type="checkbox" />
                     <span className="form-check-sign" />
-                    Remember me!
+                    Recuérdame!
                   </Label>
                 </FormGroup>
                 <div className="text-center">
