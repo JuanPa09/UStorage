@@ -1,9 +1,0 @@
-#Bucket Archivos
-ACCESS_KEY = AKIARFSJBW6Q4GENVWLB
-SECRET_ACCESS = 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
-
-#RDS
-RDS_HOST = mysql.cg3vexz2mrsj.us-west-2.rds.amazonaws.com
-RDS_PASSWORD = m0t0cr05
-RDS_USER = admin
-RDS_DATABASE = ustorage
