@@ -10,6 +10,7 @@ import Index from "views/Index.js";
 import LandingPage from "views/examples/LandingPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
+import MyDrivePage from "views/examples/MyDrivePage";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -27,6 +28,12 @@ ReactDOM.render(
         path="/profile-page"
         render={(props) => sessionStorage.getItem("token") !== null
           ? <ProfilePage {...props} />
+          : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
+      />
+      <Route
+        path="/mydrive-page"
+        render={(props) => sessionStorage.getItem("token") !== null
+          ? <MyDrivePage {...props} />
           : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
       />
       <Redirect from="/" to="/components" />

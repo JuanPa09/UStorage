@@ -12,18 +12,22 @@ import {
     Row,
     Col,
     UncontrolledTooltip,
+    Button
 } from "reactstrap";
 
-function reset(){
+function reset() {
     console.log("asd");
     document.getElementsByClassName('dropdown-menu')[0].style.right = 'auto !important';
 }
 
 export default function UStorageNavbar() {
 
-    function cerrar_sessión(){
+    function cerrar_sessión() {
         sessionStorage.removeItem("token");
-      }
+        sessionStorage.removeItem("username");
+        localStorage.removeItem("image_url");
+    }
+
     const [collapseOpen, setCollapseOpen] = React.useState(false);
     const [collapseOut, setCollapseOut] = React.useState("");
     const [color, setColor] = React.useState("navbar-transparent");
@@ -63,14 +67,14 @@ export default function UStorageNavbar() {
     };*/
     return (
         <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
-            <Container style={{ maxWidth: "100%"}}>
+            <Container style={{ maxWidth: "100%" }}>
                 <div className="navbar-translate">
-                    <NavbarBrand  to="/profile-page" id="navbar-brand" tag={Link}>
-                        <span>AyDrive• </span>
-                        Storage of cloud files
+                    <NavbarBrand to="/profile-page" id="navbar-brand" tag={Link}>
+                        <span>U-Storage• </span>
+                        Almacenamiento de archivos
                     </NavbarBrand>
                     <UncontrolledTooltip placement="bottom" target="navbar-brand">
-                        Designed and Coded by Group Number One
+                        Diseñado y codificado por el grupo número quince
                     </UncontrolledTooltip>
                     <button
                         aria-expanded={collapseOpen}
@@ -93,7 +97,7 @@ export default function UStorageNavbar() {
                         <Row>
                             <Col className="collapse-brand" xs="6">
                                 <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                                    AyDrive• Storage Of Cloud Files Phase 1
+                                    U-Storage• Almacenamiento de archivos
                                 </a>
                             </Col>
                             <Col className="collapse-close text-right" xs="6">
@@ -108,22 +112,7 @@ export default function UStorageNavbar() {
                         </Row>
                     </div>
                     <Nav navbar>
-                        <UncontrolledDropdown group>
-                            <DropdownToggle caret color="danger" data-toggle="dropdown">
-                            <img
-                                alt="..."
-                                className="img-fluid rounded-circle shadow"
-                                src={require("assets/img/james.jpg").default}
-                                style={{ width: "32px", marginRight: "8px" }}
-                            />
-                                {JSON.parse(sessionStorage.getItem('data'))[0].nombre + " " + JSON.parse(sessionStorage.getItem('data'))[0].apellido}
-                            </DropdownToggle>
-                            <DropdownMenu className="reset" right >
-                                <DropdownItem tag={Link} to="/modificaUsuario" >Mi perfil</DropdownItem>
-                                <DropdownItem tag={Link} to="/" onClick={cerrar_sessión} >Cerrar Sessión</DropdownItem>
-
-                            </DropdownMenu>
-                        </UncontrolledDropdown>
+                        <Button color="primary" onClick={cerrar_sessión} size="sm">Cerrar sesión</Button>
                     </Nav>
                 </Collapse>
             </Container>

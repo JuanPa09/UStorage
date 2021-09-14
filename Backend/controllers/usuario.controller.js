@@ -84,12 +84,12 @@ exports.login = async(req,res,next)=>{
         const user = req.query.user;
         const password = req.query.password;
         const hashPass = crypto.createHash('sha256').update(password).digest('base64');
-        sql.query(`Select token from User where (username = '${user}' or mail = '${user}') and password = '${hashPass}';`,(err,result)=>{
+        sql.query(`Select token, username, image_url from User where (username = '${user}' or mail = '${user}') and password = '${hashPass}';`,(err,result)=>{
             if(err)
                 return res.send({status: 404, msg: err})
                 if(result.length == 0)
                     return res.send({status: 403, msg: 'Usuario ó Contraseña Incorrectos'})
-                return res.send({status: 200, token: result[0].token})
+                return res.send({status: 200, token: result[0].token, username: result[0].username, image_url: result[0].image_url})
         })
     }catch(error){
         return res.send({status: 404, msg: error})

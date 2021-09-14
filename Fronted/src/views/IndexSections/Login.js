@@ -50,6 +50,9 @@ export default function Signup() {
             .then(data => {
                 if (data.data.status == 200) {
                     sessionStorage.setItem("token", data.data.token)
+                    sessionStorage.setItem("username", data.data.username)
+                    localStorage.setItem("image_url", data.data.image_url)
+                    window.location.href="/mydrive-page";
                 } else if (data.data.status == 403) {
                     tastError("Usuario ó Contraseña Incorrectos.");
                 } else {
