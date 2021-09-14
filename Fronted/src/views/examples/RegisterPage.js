@@ -101,7 +101,9 @@ export default function RegisterPage() {
       preview.src = reader.result;
       preview.style.display = "block";
     }
-    reader.readAsDataURL(e.target.files[0]);
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
   }
 
   function image() {
@@ -123,42 +125,38 @@ export default function RegisterPage() {
     } else if (passwordinput != confirmPasswordinput) {
       tastWarning("Campo contraseña no es igual a confirmar contraseña.");
     } else {
-      /*var files = document.getElementById('file').files;
-      console.log(files[0]);*/
       var file = document.getElementById('file').files[0];
-      /*console.log("File: ", file);
-      const formData = new FormData()
-      let body = {
-        username: nicknameinput,
-        mail: emailinput,
-        password: passwordinput
-      };
-      formData.append("body", body);
-      formData.append("image", file);
-      console.log(formData);*/
-      /*axios.post('http://localhost:3000/usuario/registrar', formData).then(data => {
-        console.log(data);
-      }).catch((error) => {
-        console.log(error)
-      })*/
       var bodyFormData = new FormData();
       bodyFormData.append('username', nicknameinput);
       bodyFormData.append('mail', emailinput);
       bodyFormData.append('password', passwordinput);
       bodyFormData.append('image', file);
+      
       axios({
         method: "post",
         url: "http://localhost:3000/usuario/registrar",
         data: bodyFormData,
         headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: p => {
+          const progress = p.loaded / p.total;
+          tastRegistrando("Procesando...");
+        }
       })
         .then(function (response) {
           //handle success
-          console.log(response);
+          if(response.data.status == 200){
+            toast.dismiss();
+            tastSuccess("Registro correcto!");
+            window.setTimeout(function(){ window.location.href="/components"; }, 2050);
+          }else{
+            toast.dismiss();
+            tastError("Nombre de usuario o email ya existen en el sistema.");
+          }
         })
         .catch(function (response) {
           //handle error
-          console.log(response);
+          toast.dismiss();
+          tastError(String(response));
         });
     }
 
@@ -174,6 +172,44 @@ export default function RegisterPage() {
       draggable: true,
       progress: undefined,
       containerId: 'warn'
+    });
+  }
+
+  function tastSuccess(message) {
+    toast.success(message, {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      containerId: 'sus'
+    });
+  }
+
+  function tastRegistrando(message) {
+    toast.info(message, {
+      position: "bottom-right",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      containerId: 'pro'
+    });
+  }
+
+  function tastError(message) {
+    toast.error(message, {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      containerId: 'err'
     });
   }
 
@@ -373,11 +409,35 @@ export default function RegisterPage() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          toastStyle={{ backgroundColor: "crimson", color: "#FFF" }}
+          toastStyle={{ backgroundColor: "#3498db", color: "#FFF" }}
         />
         <ToastContainer
           enableMultiContainer
           containerId={'sus'}
+          position="bottom-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          toastStyle={{ backgroundColor: "green", color: "#FFF" }}
+        />
+        <ToastContainer
+          enableMultiContainer
+          containerId={'pro'}
+          position="bottom-right"
+          autoClose={false}
+          hideProgressBar={true}
+          newestOnTop={false}
+          rtl={false}
+          toastStyle={{ backgroundColor: "navy", color: "#FFF" }}
+        />
+        <ToastContainer
+          enableMultiContainer
+          containerId={'err'}
           position="bottom-right"
           autoClose={3000}
           hideProgressBar={false}
@@ -387,6 +447,7 @@ export default function RegisterPage() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
+          toastStyle={{ backgroundColor: "crimson", color: "#FFF" }}
         />
         <Footer />
       </div>
