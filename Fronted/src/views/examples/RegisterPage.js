@@ -17,7 +17,6 @@
 */
 import React, { useState } from "react";
 import classnames from "classnames";
-import ReactDatetime from "react-datetime";
 
 // reactstrap components
 import {
@@ -28,8 +27,6 @@ import {
   CardFooter,
   CardImg,
   CardTitle,
-  Label,
-  FormGroup,
   Form,
   Input,
   InputGroupAddon,
@@ -46,7 +43,6 @@ import Footer from "components/Footer/Footer.js";
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { css } from "glamor";
 
 export default function RegisterPage() {
   const [squares1to6, setSquares1to6] = React.useState("");
@@ -59,8 +55,6 @@ export default function RegisterPage() {
   const [passwordinput, setpasswordinput] = useState('');
   const [confirmPasswordFocus, setConfirmPasswordFocus] = React.useState(false);
   const [confirmPasswordinput, setconfirmPasswordinput] = useState('');
-  const [fullNameFocus, setFullNameFocus] = React.useState(false);
-  const [dateOfbFocus, setdateOfbFocus] = React.useState(false);
   React.useEffect(() => {
     document.body.classList.toggle("register-page");
     document.documentElement.addEventListener("mousemove", followCursor);

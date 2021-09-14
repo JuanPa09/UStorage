@@ -1,23 +1,10 @@
-/*!
-
-=========================================================
-* BLK Design System React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/blk-design-system-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/blk-design-system-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
+import React, { useState } from "react";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // reactstrap components
 import {
     Button,
@@ -41,8 +28,33 @@ import {
 
 export default function Signup() {
     const [fullNameFocus, setFullNameFocus] = React.useState(false);
-    const [emailFocus, setEmailFocus] = React.useState(false);
     const [passwordFocus, setPasswordFocus] = React.useState(false);
+    const [nicknameinput, setnicknameinput] = useState('');
+    const [passwordinput, setpasswordinput] = useState('');
+
+    function verificacion() {
+        if (nicknameinput == '') {
+            tastWarning("Campo nickname o email vacio.");
+        } else if (passwordinput == '') {
+            tastWarning("Campo password vacio.");
+        } else {
+
+        }
+    }
+
+    function tastWarning(message) {
+        toast.warn(message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            containerId: 'warn'
+        });
+    }
+
     return (
         <div className="section section-signup">
             <Container>
@@ -94,6 +106,8 @@ export default function Signup() {
                                             type="text"
                                             onFocus={(e) => setFullNameFocus(true)}
                                             onBlur={(e) => setFullNameFocus(false)}
+                                            value={nicknameinput}
+                                            onChange={event => setnicknameinput(event.target.value)}
                                         />
                                     </InputGroup>
                                     <InputGroup
@@ -111,6 +125,8 @@ export default function Signup() {
                                             type="password"
                                             onFocus={(e) => setPasswordFocus(true)}
                                             onBlur={(e) => setPasswordFocus(false)}
+                                            value={passwordinput}
+                                            onChange={event => setpasswordinput(event.target.value)}
                                         />
                                     </InputGroup>
                                     <FormGroup check className="text-left">
@@ -126,13 +142,26 @@ export default function Signup() {
                                 </Form>
                             </CardBody>
                             <CardFooter>
-                                <Button className="btn-round" color="primary" size="lg">
+                                <Button className="btn-round" color="primary" size="lg" onClick={verificacion}>
                                     Entrar
                                 </Button>
                             </CardFooter>
                         </Card>
                     </Col>
                 </Row>
+                <ToastContainer
+                    enableMultiContainer
+                    containerId={'warn'}
+                    position="bottom-right"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </Container>
         </div>
     );
