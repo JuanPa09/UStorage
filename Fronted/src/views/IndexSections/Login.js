@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Apiurl } from './../../../service/apirest';
 
 // reactstrap components
 import {
@@ -38,8 +39,19 @@ export default function Signup() {
         } else if (passwordinput == '') {
             tastWarning("Campo password vacio.");
         } else {
-
+            login();
         }
+    }
+
+    function login() {
+        let url_ = Apiurl + "/usuario/ingresar" + "?" + "user=" + nicknameinput + "password=" + passwordinput;
+        axios.get(url_)
+            .then(data => {
+                console.log(data);
+            }).catch(error => {
+                this.setState({ errorMessage: error.message });
+                console.error('There was an error!', error);
+            });
     }
 
     function tastWarning(message) {

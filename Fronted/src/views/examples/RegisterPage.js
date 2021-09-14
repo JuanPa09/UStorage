@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* BLK Design System React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/blk-design-system-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/blk-design-system-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState } from "react";
 import classnames from "classnames";
 
@@ -43,6 +26,7 @@ import Footer from "components/Footer/Footer.js";
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Apiurl } from './../../../service/apirest';
 
 export default function RegisterPage() {
   const [squares1to6, setSquares1to6] = React.useState("");
@@ -125,10 +109,10 @@ export default function RegisterPage() {
       bodyFormData.append('mail', emailinput);
       bodyFormData.append('password', passwordinput);
       bodyFormData.append('image', file);
-      
+      let url_ = Apiurl + "/usuario/registrar";
       axios({
         method: "post",
-        url: "http://localhost:3000/usuario/registrar",
+        url: url_,
         data: bodyFormData,
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: p => {
