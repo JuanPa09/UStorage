@@ -49,7 +49,7 @@ export default function Signup() {
         axios.get(url_)
             .then(data => {
                 if (data.data.status == 200) {
-                    alert("todo ok");
+                    sessionStorage.setItem("token", data.data.token)
                 } else if (data.data.status == 403) {
                     tastError("Usuario ó Contraseña Incorrectos.");
                 } else {
