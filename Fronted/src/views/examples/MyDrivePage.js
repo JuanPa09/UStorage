@@ -284,7 +284,7 @@ export default function MyDrivePage() {
                                     style={{ width: "150px" }}
                                 />
                                 <small className="d-block text-uppercase font-weight-bold mb-4" style={{marginTop: "4%"}}>
-                                    Raised
+                                    {sessionStorage.getItem("username")}
                                 </small>
                                 <UncontrolledDropdown group>
                                     <DropdownToggle caret color="success" data-toggle="dropdown">
