@@ -26,7 +26,7 @@ import Footer from "components/Footer/Footer.js";
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Apiurl } from './../../../service/apirest';
+import { Apiurl } from './../../service/apirest';
 
 export default function RegisterPage() {
   const [squares1to6, setSquares1to6] = React.useState("");

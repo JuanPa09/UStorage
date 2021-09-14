@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Apiurl } from './../../../service/apirest';
+import { Apiurl } from './../../service/apirest';
 
 // reactstrap components
 import {
@@ -39,18 +39,24 @@ export default function Signup() {
         } else if (passwordinput == '') {
             tastWarning("Campo password vacio.");
         } else {
+            //tastRegistrando("Procesando...");
             login();
         }
     }
 
     function login() {
-        let url_ = Apiurl + "/usuario/ingresar" + "?" + "user=" + nicknameinput + "password=" + passwordinput;
+        let url_ = Apiurl + "/usuario/ingresar" + "?" + "user=" + nicknameinput + "&" + "password=" + passwordinput;
         axios.get(url_)
             .then(data => {
-                console.log(data);
+                if (data.data.status == 200) {
+                    alert("todo ok");
+                } else if (data.data.status == 403) {
+                    tastError("Usuario ó Contraseña Incorrectos.");
+                } else {
+                    tastError("Error 404");
+                }
             }).catch(error => {
-                this.setState({ errorMessage: error.message });
-                console.error('There was an error!', error);
+                tastError(String(error));
             });
     }
 
@@ -64,6 +70,19 @@ export default function Signup() {
             draggable: true,
             progress: undefined,
             containerId: 'warn'
+        });
+    }
+
+    function tastError(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            containerId: 'err'
         });
     }
 
@@ -143,7 +162,7 @@ export default function Signup() {
                                     </InputGroup>
                                     <FormGroup check className="text-left">
                                         <Label check>
-                                            <Input type="checkbox" />
+                                            <Input type="checkbox" checked/>
                                             <span className="form-check-sign" />Recuérdame{" "}
                                             <a href="" onClick={(e) => e.preventDefault()}>
 
@@ -164,8 +183,21 @@ export default function Signup() {
                 <ToastContainer
                     enableMultiContainer
                     containerId={'warn'}
-                    position="bottom-right"
+                    position="top-right"
                     autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
+                <ToastContainer
+                    enableMultiContainer
+                    containerId={'err'}
+                    position="top-right"
+                    autoClose={3000}
                     hideProgressBar={false}
                     newestOnTop={false}
                     closeOnClick
