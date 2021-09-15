@@ -153,8 +153,8 @@ exports.update = async (req,res)=>{
         return res.send({status:403, msg:'Existen campos vacíos'})
 
     try{
-        if(token != crypto.createHash('sha256').update(password).digest('base64'))
-            return res.send({status:403, msg:'Constraseña Incorrecta'})
+        //if(token != crypto.createHash('sha256').update(password).digest('base64'))
+        //    return res.send({status:403, msg:'Constraseña Incorrecta'})
 
         
         let date_ob = new Date();

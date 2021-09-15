@@ -102,7 +102,7 @@ export default function MyDrivePage() {
     const [demoModal, setDemoModal] = React.useState(false);
     const [carpetaInput, setCarpetaInput] = useState('');
     const [visibility_, setVisibility_] = useState('');
-    
+
     const [passwordSubirArchvivoInput, setPasswordSubirArchvivoInput] = useState('');
     const [passwordEditarArchvivoInput, setPasswordEditarArchvivoInput] = useState('');
     const [archivoSeleccionadoInput, setArchivoSeleccionadoInput] = useState('');
@@ -494,9 +494,9 @@ export default function MyDrivePage() {
 
     function abrirModalEditarArchivo() {
         setNombreArchivoEditarInput(localStorage.getItem("name"));
-        if(localStorage.getItem("id_visibility") == "1"){ // publico
+        if (localStorage.getItem("id_visibility") == "1") { // publico
             setVisibility_("1");
-        }else{ // 2 privado
+        } else { // 2 privado
             setVisibility_("2");
         }
         setEditarArchivoModal(true);
@@ -511,13 +511,13 @@ export default function MyDrivePage() {
         }
     }
 
-    function validarEditarArchivo(){
-        if(nombreArchivoEditarInput == ''){
+    function validarEditarArchivo() {
+        if (nombreArchivoEditarInput == '') {
             toastWarning("Campo nombre de archivo vacio.");
             setNombreArchivoEditarInput(localStorage.getItem("name"));
-        } else if(passwordEditarArchvivoInput == ''){
+        } else if (passwordEditarArchvivoInput == '') {
             toastWarning("Debes colocar tu contraseña para editar el archivo.");
-        }else {
+        } else {
             // verificamos password de usuario
             var bodyFormData_ = new FormData();
             bodyFormData_.append('token', sessionStorage.getItem('token'));
@@ -534,8 +534,7 @@ export default function MyDrivePage() {
             }).then(function (response) {
                 //handle success
                 if (response.data.msg == 'correcto') { // todo correcto
-                    alert("correcto");
-                    //editarArchivoConfirm(tipoArchivo);
+                    editarArchivoConfirm();
                 } else {
                     toast.dismiss();
                     tastError("Contraseña incorrecta.");
@@ -548,6 +547,40 @@ export default function MyDrivePage() {
             });
             /////////////////////////////
         }
+    }
+
+    function editarArchivoConfirm() {
+        //console.log(nombreArchivoEditarInput);
+        //console.log(sessionStorage.getItem("token"));
+        //console.log(visibility_);
+        //console.log(localStorage.getItem("id_file"));
+        var bodyFormData = new FormData();
+        bodyFormData.append('name', nombreArchivoEditarInput);
+        bodyFormData.append('visibility', visibility_);
+        bodyFormData.append('token', sessionStorage.getItem("token"));
+        bodyFormData.append('password', passwordEditarArchvivoInput);
+        let url = Apiurl + "/usuario/archivo/actualizar/" + localStorage.getItem("id_file");
+        axios({
+            method: "put",
+            url: url,
+            data: bodyFormData,
+            headers: { "Content-Type": "multipart/form-data" }
+        }).then(function (response) {
+            //handle success
+            console.log(response.data);
+            if (response.data.status == 200) {
+                cerrarModalEditarArchivo();
+                toast.dismiss();
+                tastSuccess("Se ha editado un elemento.");
+                getMsg();
+            } else {
+                tastError("Erro 404");
+            }
+        }).catch(function (response) {
+            //handle error
+            toast.dismiss();
+            tastError(String(response));
+        });
     }
 
     return (
