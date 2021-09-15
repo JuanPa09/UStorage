@@ -785,7 +785,7 @@ export default function MyDrivePage() {
                 next: "Siguiente página",
                 previous: "Página anterior",
                 rowsPerPage: "Usuarios por página:",
-                displayRows: "of",
+                displayRows: "de",
             },
             toolbar: {
                 search: "Buscar",
@@ -849,7 +849,23 @@ export default function MyDrivePage() {
     const [msgVisualizacion, setMsgVisualizacion] = useState([]);
 
     const getMsgVisualizacion = async () => {
-
+        try {
+            var contador = 0;
+            let url = Apiurl + "/usuario/archivo/amigos?token=" + sessionStorage.getItem('token');
+            await axios.get(url).then(data => {
+                console.log(data.data.datos);
+                const result = [];
+                data.data.datos.forEach(item => {
+                    console.log(item);
+                    result[contador] = [item.username, item.name, item.date, item.link];
+                    contador++;
+                });
+                setMsgVisualizacion(result);
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     useEffect(() => {
@@ -857,11 +873,68 @@ export default function MyDrivePage() {
     }, [])
 
     const columns_ = [
-
+        {
+            name: "Propietario",
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: "Nombre de Archivo",
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: "Fecha",
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: "Acción",
+            options: {
+                filter: false,
+                customBodyRender: (value) => (
+                    <Button color="info" onClick={event => verArchivoP(value)} size="sm">
+                        <i className="tim-icons icon-gift-2" /> Ver
+                    </Button>
+                )
+            }
+        },
     ];
 
     const options_ = {
-
+        filterType: 'dropdown',
+        responsive: 'stacked',
+        rowsPerPage: 2,
+        page: 0,
+        selectableRows: false,
+        textLabels: {
+            body: {
+                noMatch: "Lo sentimos, no se encontraron archivos",
+                toolTip: "Ordenar",
+                columnHeaderTooltip: column => `Ordenar por ${column.label}`
+            },
+            pagination: {
+                next: "Siguiente página",
+                previous: "Página anterior",
+                rowsPerPage: "Archivos por página:",
+                displayRows: "de",
+            },
+            toolbar: {
+                search: "Buscar",
+                downloadCsv: "Descargar CSV",
+                print: "Imprimir",
+                viewColumns: "Ver columnas",
+                filterTable: "Tabla de filtros",
+            },
+            filter: {
+                all: "Todos",
+                title: "FILTROS",
+                reset: "REINICIAR",
+            }
+        }
     };
 
     function d_(asd) {
@@ -874,6 +947,10 @@ export default function MyDrivePage() {
             }
         }
         return newArray;
+    }
+
+    function verArchivoP(a){
+        window.open(a, '_blank');
     }
 
     return (
@@ -1348,7 +1425,7 @@ export default function MyDrivePage() {
                         <h3 className="mb-0" style={{ color: "black" }}>Archivos publicos de mis amigos</h3>
                     </ModalHeader>
                     <ModalBody style={{ padding: "0px" }}>
-                    <MUIDataTable
+                        <MUIDataTable
                             title={"Archivos"}
                             data={d_(msgVisualizacion)}
                             columns={columns_}
