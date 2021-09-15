@@ -29,6 +29,7 @@ import {
     PopoverBody,
     PopoverHeader,
     Modal,
+    FormText
 } from "reactstrap";
 
 // menu contextual
@@ -49,6 +50,7 @@ import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FcPlus } from "react-icons/fc";
+import { FiEye } from "react-icons/fi";
 import { MdFileUpload } from "react-icons/md";
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 //import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
@@ -101,6 +103,7 @@ export default function MyDrivePage() {
     const { show } = useContextMenu({ id: MENU_ID });
     const [demoModal, setDemoModal] = React.useState(false);
     const [carpetaInput, setCarpetaInput] = useState('');
+    const [subirArchivoModal, setSubirArchivoModal] = React.useState(false);
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
         document.documentElement.addEventListener("mousemove", followCursor);
@@ -249,20 +252,46 @@ export default function MyDrivePage() {
         }
     }
 
-    //function displayMenu(e) {
-    // put whatever custom logic you need
-    // you can even decide to not display the Menu
-    //    show(e);
-    //}
-
-    let bob = a => {
-    };
-
     function menuCOntextual(e) {
         if (e.target.localName == "div") {
             show(e, { id: 'menu-id' })
         } else {
             show(e, { id: 'archivo-id' })
+        }
+    }
+
+    function modalSubirArchivo() {
+        console.log("hola");
+    }
+
+    function upArchivo(e) {
+        console.log(e);
+        //console.log(document.getElementById('upload').files[0].name);
+        let archivo = document.getElementById('file').value;
+        //console.log(FixPath(archivo));
+        //let archivo = document.getElementById("file").files[0].path;
+        //console.log(archivo);
+
+        // Obtener extensión del archivo
+        //let extension = archivo.substring(archivo.lastIndexOf('.'), archivo.length);
+        // Obtener nombre del archivo
+        //let nombreArchivo = document.getElementById('upload').files[0].name.slice(0, -extension.length);
+        //console.log(archivo);
+        //console.log(document.getElementById('upload').files[0].name.slice(0, -extension.length))
+        //console.log(extension);
+
+        /*var files = document.getElementById('upload').files;
+        if (files.length > 0) {
+            getBase64(files[0], nombreArchivo, extension);
+        }*/
+    }
+
+    function mostrarContrasena() {
+        var tipo = document.getElementById("passwordSubirArchvivo");
+        if (tipo.type == "password") {
+            tipo.type = "text";
+        } else {
+            tipo.type = "password";
         }
     }
 
@@ -276,14 +305,13 @@ export default function MyDrivePage() {
 
                         <Row style={styles.rowOfPage}>
                             <Col xs="2">
-                                
                                 <img
                                     alt="..."
                                     className="img-fluid rounded shadow-lg"
                                     src={localStorage.getItem("image_url")}
                                     style={{ width: "150px" }}
                                 />
-                                <small className="d-block text-uppercase font-weight-bold mb-4" style={{marginTop: "4%"}}>
+                                <small className="d-block text-uppercase font-weight-bold mb-4" style={{ marginTop: "4%" }}>
                                     {sessionStorage.getItem("username")}
                                 </small>
                                 <UncontrolledDropdown group>
@@ -293,7 +321,7 @@ export default function MyDrivePage() {
                                     </DropdownToggle>
                                     <DropdownMenu className="reset" >
 
-                                        <DropdownItem > <MdFileUpload className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Subir archivo</DropdownItem>
+                                        <DropdownItem onClick={() => setSubirArchivoModal(true)} > <MdFileUpload className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Subir archivo</DropdownItem>
 
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
@@ -374,6 +402,110 @@ export default function MyDrivePage() {
                     </div>
                 </Modal>
                 {/* End Demo Modal */}
+
+
+                {/* Start Subir Archivo Modal */}
+                <Modal
+                    modalClassName="modal-black"
+                    isOpen={subirArchivoModal}
+                    toggle={() => setSubirArchivoModal(false)}
+                >
+                    <div className="modal-header justify-content-center">
+                        <button className="close" onClick={() => setSubirArchivoModal(false)}>
+                            <i className="tim-icons icon-simple-remove text-white" />
+                        </button>
+                        <div className="text-muted text-center ml-auto mr-auto">
+                            <h3 className="mb-0">Subir Archivo</h3>
+                        </div>
+                    </div>
+                    <div className="modal-body">
+                        <div className="btn-wrapper text-center" style={{ marginBottom: "2%" }}>
+                            <Button color="warning">
+                                Seleccionar Archivo
+                            </Button>
+                        </div>
+                        <Form className="form">
+                            <div className="form-row">
+                                <Col>
+                                    <fieldset disabled >
+                                        <Label for="disabled" style={{ marginBottom: "0px" }}>Archivo Seleccionado</Label>
+                                        <Input type="text" id="disabled" />
+                                    </fieldset>
+                                </Col>
+                            </div>
+                        </Form>
+
+                        <Form className="form">
+                            <div className="form-row">
+                                <Col>
+                                    <fieldset >
+                                        <Label for="disabled" style={{ marginBottom: "0px" }}>Nombre Archivo</Label>
+                                        <Input type="text" />
+                                    </fieldset>
+                                </Col>
+                                <Col>
+                                    <Label style={{ marginBottom: "0px" }}>Tipo Archivo</Label>
+                                    <FormGroup check className="form-check-radio">
+                                        <Label check>
+                                            <Input
+                                                defaultValue="option1"
+                                                id="exampleRadios1"
+                                                name="exampleRadios"
+                                                type="radio"
+                                            />
+                                            <span className="form-check-sign" />
+                                            Publico
+                                        </Label>
+                                        <Label check style={{ marginLeft: "12%" }}>
+                                            <Input
+                                                defaultChecked
+                                                defaultValue="option2"
+                                                id="exampleRadios1"
+                                                name="exampleRadios"
+                                                type="radio"
+                                            />
+                                            <span className="form-check-sign" />
+                                            Privado
+                                        </Label>
+                                    </FormGroup>
+                                </Col>
+                            </div>
+                        </Form>
+                        <FormText color="muted" style={{ marginTop: "4%", marginBottom: "4%" }}>
+                            Para poder subir un archivo se pedirá confirmar su contraseña.
+                        </FormText>
+                        <Form className="form">
+                            <div className="form-row">
+                                <Col>
+                                    <InputGroup>
+                                        <Input placeholder="Coloca tu contraseña acá" type="password" id="passwordSubirArchvivo" />
+                                        <InputGroupAddon addonType="append" onClick={mostrarContrasena} style={{ cursor: "pointer" }}>
+                                            <InputGroupText>
+                                                <FiEye className="tim-icons"  />
+                                                
+                                            </InputGroupText>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </Col>
+                            </div>
+                        </Form>
+                    </div>
+                    <div className="modal-footer">
+                        <Button color="info" type="button">
+                            Cargar
+                        </Button>
+                        <Button
+                            color="danger"
+                            type="button"
+                            onClick={() => setDemoModal(false)}
+                        >
+                            Cancelar
+                        </Button>
+                    </div>
+                </Modal>
+                {/* End Subir Archivo Modal */}
+
+
                 <ToastContainer
                     position="top-right"
                     autoClose={4000}
