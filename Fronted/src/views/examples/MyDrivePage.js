@@ -575,7 +575,8 @@ export default function MyDrivePage() {
                 tastSuccess("Se ha editado un elemento.");
                 getMsg();
             } else {
-                tastError("Erro 404");
+                toast.dismiss();
+                tastError("Error 404");
             }
         }).catch(function (response) {
             //handle error
@@ -654,7 +655,27 @@ export default function MyDrivePage() {
     }
 
     function eliminarArchivoConfirm(){
-        
+        let url_ = Apiurl + "/usuario/archivo/eliminar/" + localStorage.getItem("id_file");
+        axios({
+            method: "delete",
+            url: url_,
+            headers: { "Content-Type": "multipart/form-data" }
+        }).then(function (response) {
+            //handle success
+            if (response.data.status == 200) {
+                cerrarModalEliminarArchivo();
+                toast.dismiss();
+                tastSuccess("Se ha eliminado un elemento.");
+                getMsg();
+            } else {
+                toast.dismiss();
+                tastError("Error 404");
+            }
+        }).catch(function (response) {
+            //handle error
+            toast.dismiss();
+            tastError(String(response));
+        });
     }
 
     return (

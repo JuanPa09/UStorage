@@ -109,9 +109,10 @@ exports.new = async(req,res,next)=>{
 exports.delete = async(req,res)=>{
 
     try{
-        const id = req.query.id
-        sql.query(`Select key_name from File where id_file = ${id};`,(err,resultSelect)=>{
-
+        const id = req.params.id;
+        sql.query(`Select key_name from File where id_file = '${id}';`,(err,resultSelect)=>{
+            if (err)
+                return res.send({ status: 404, msg: err })
             if(resultSelect.length == 0)
                 return res.send({status:404, msg:'Archivo no encontrado'})
 
