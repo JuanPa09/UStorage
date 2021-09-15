@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import classnames from "classnames";
-import ReactDatetime from "react-datetime";
+import React, { useState, useEffect } from "react";
 import { FaRegCopy, FaList, FaEllipsisV, FaShareAlt } from 'react-icons/fa'
 import { FcFolder } from "react-icons/fc";
 
@@ -53,6 +51,7 @@ import { Apiurl } from './../../service/apirest';
 import { FcPlus } from "react-icons/fc";
 import { FiEye } from "react-icons/fi";
 import { MdFileUpload } from "react-icons/md";
+import { ImFolder, ImImage, ImFilePdf, ImFileText2 } from "react-icons/im";
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 //import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 //import { FaRegCopy, FaList, FaEllipsisV, FaShareAlt } from 'react-icons/fa'
@@ -84,14 +83,10 @@ function ocultar() {
     }*/
 }
 
-
-
 const MENU_ID = "menu-id";
 const ARCHIVO_ID = "archivo-id";
 
 export default function MyDrivePage() {
-
-
     const [squares1to6, setSquares1to6] = React.useState("");
     const [cambio, setCambio] = React.useState("");
     const [squares7and8, setSquares7and8] = React.useState("");
@@ -164,7 +159,10 @@ export default function MyDrivePage() {
         },
         lefth1: {
             textAlign: "left",
-            padding: "14px"
+            paddingLeft: "14px",
+            paddingRight: "14px",
+            paddingTop: "20px",
+            paddingBottom: "0px"
         },
         iconh1: {
             fontSize: "29px"
@@ -385,7 +383,7 @@ export default function MyDrivePage() {
             cerrarModalSubirArchivo();
             toast.dismiss();
             tastSuccess("Se ha subido un elemento.");
-            // llamar a traer archivos
+            getMsg();
         }).catch(function (response) {
             //handle error
             toast.dismiss();
@@ -395,15 +393,15 @@ export default function MyDrivePage() {
 
     function tastSuccess(message) {
         toast.success(message, {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
         });
-      }
+    }
 
     function tastRegistrando(message) {
         toast.info(message, {
@@ -440,6 +438,27 @@ export default function MyDrivePage() {
         });
     }
 
+    /**
+     * Mostrar mis archivos
+     */
+
+    const [msg, setMsg] = useState([]);
+
+    const getMsg = async () => {
+        try {
+            let url = Apiurl + "/usuario/archivo/mios" + "?" + "token=" + sessionStorage.getItem('token');
+            const { data } = await axios.get(url);
+            setMsg(data.datos.map(Item => ({ id_file_type: Item.id_file_type, id_visibility: Item.id_visibility, link: Item.link, name: Item.name })))
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getMsg();
+    }, [])
+
     return (
         <>
             <UStorageNavbar />
@@ -472,22 +491,87 @@ export default function MyDrivePage() {
                                 </UncontrolledDropdown>
                             </Col>
 
-                            <Col xs="7" style={styles.centerGrid} onClick={activateLasers} onMouseMove={ocultar} onContextMenu={e => menuCOntextual(e)}>
-                                {/*<ContextMenuTrigger id="contextmenu">*/}
+                            <Col xs="5" style={styles.centerGrid} onClick={activateLasers} onMouseMove={ocultar} onContextMenu={e => menuCOntextual(e)}>
+                                <h2 style={styles.lefth1}> <i className="tim-icons icon-laptop" style={styles.iconh1} /> Publicos</h2>
+
+
                                 <div style={styles.rowOfPage} >
-                                    {/*<ContextMenuTrigger id="contextmenu1">*/}
-                                    <span onContextMenu={e => menuCOntextual(e)}>1 of 3</span>
-                                    {/*</ContextMenuTrigger>*/}
+                                    <Row style={{ marginLeft: "0" }}>
+                                        {
+                                            msg.map(message => {
+                                                return (
+                                                    (message.id_visibility == 1) ?
+                                                        <Col xs="6" style={{
+                                                            fontSize: ".75rem",
+                                                            display: "block",
+                                                            marginTop: "0.6rem",
+                                                            padding: ".75rem",
+                                                            color: "#393f49",
+                                                            backgroundColor: "#fff",
+                                                            borderRadius: ".2857rem",
+                                                            textAlign: "left",
+                                                            maxWidth: "47%",
+                                                            marginRight: "0.5rem",
+                                                            cursor: "pointer"
+                                                        }}
+                                                        >
+                                                            {(message.id_file_type == 1) ?
+                                                                <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
+                                                                :
+                                                                (message.id_file_type == 2) ?
+                                                                    <ImFilePdf className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "crimson" }} />
+                                                                    :
+                                                                    <ImFileText2 className="copy" style={{ fontSize: "26px", marginRight: "8px" }} />}
+                                                            <span style={{ fontSize: "14px", position: "absolute", marginTop: "1.22%" }}>{message.name}</span>
+                                                        </Col> : ""
+                                                )
+                                            })
+                                        }
+                                    </Row >
+                                    {/*<span onContextMenu={e => menuCOntextual(e)}>1 of 3</span>*/}
                                 </div>
-                                {/*</ContextMenuTrigger>*/}
+
+
                             </Col>
+                            <Col xs="5" style={styles.leftGrid}>
+                                <h2 style={styles.lefth1}> <i className="tim-icons icon-lock-circle" style={styles.iconh1} /> Privados</h2>
 
-                            <Col xs="3" style={styles.leftGrid}>
-                                <h1 style={styles.lefth1}> <i className="tim-icons icon-laptop" style={styles.iconh1} /> Data</h1>
 
-                                <h3 style={styles.lefth3}> Detalles</h3>
-                                <i className="tim-icons icon-paper" style={styles.iconDetalles} />
-                                <p style={styles.pDetalles}>Selecciona un archivo o una carpeta para ver sus detalles</p>
+                                <div style={styles.rowOfPage} >
+                                    <Row style={{ marginLeft: "0" }}>
+                                        {
+                                            msg.map(message => {
+                                                return (
+                                                    (message.id_visibility == 2) ?
+                                                        <Col xs="6" style={{
+                                                            fontSize: ".75rem",
+                                                            display: "block",
+                                                            marginTop: "0.6rem",
+                                                            padding: ".75rem",
+                                                            color: "#393f49",
+                                                            backgroundColor: "#fff",
+                                                            borderRadius: ".2857rem",
+                                                            textAlign: "left",
+                                                            maxWidth: "47%",
+                                                            marginRight: "0.5rem",
+                                                            cursor: "pointer"
+                                                        }}
+                                                        >
+                                                            {(message.id_file_type == 1) ?
+                                                                <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
+                                                                :
+                                                                (message.id_file_type == 2) ?
+                                                                    <ImFilePdf className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "crimson" }} />
+                                                                    :
+                                                                    <ImFileText2 className="copy" style={{ fontSize: "26px", marginRight: "8px" }} />}
+                                                            <span style={{ fontSize: "14px", position: "absolute", marginTop: "1.22%" }}>{message.name}</span>
+                                                        </Col> : ""
+                                                )
+                                            })
+                                        }
+                                    </Row >
+                                </div>
+
                             </Col>
                         </Row>
                     </div>
