@@ -54,7 +54,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Apiurl } from './../../service/apirest';
 import { FcPlus } from "react-icons/fc";
 import { FiEye } from "react-icons/fi";
-import { MdFileUpload, MdPersonAdd } from "react-icons/md";
+import { MdFileUpload, MdPersonAdd, MdShare } from "react-icons/md";
 import { ImFolder, ImImage, ImFilePdf, ImFileText2 } from "react-icons/im";
 import { TiFolderDelete, TiDocumentDelete, TiEdit, TiExportOutline, TiFolderOpen } from "react-icons/ti";
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -117,7 +117,7 @@ export default function MyDrivePage() {
     const [editarArchivoModal, setEditarArchivoModal] = React.useState(false);
     const [miniModalEliminar, setMiniModalEliminar] = React.useState(false);
     const [agregarAmigoModal, setAgregarAmigoModal] = React.useState(false);
-
+    const [visualizacionModal, setVisualizacionModal] = React.useState(false);
 
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
@@ -692,12 +692,6 @@ export default function MyDrivePage() {
      */
 
     function cerrarModalAgregarAmigo() {
-        /*setNombreArchivoEditarInput('');
-        setPasswordEditarArchvivoInput('');
-        setVisibility_('');
-        localStorage.removeItem("id_file");
-        localStorage.removeItem("name");
-        localStorage.removeItem("id_visibility");*/
         setAgregarAmigoModal(false);
     }
 
@@ -746,52 +740,34 @@ export default function MyDrivePage() {
 
     function agrAmigo(a) {
         var bodyFormData_ = new FormData();
-            bodyFormData_.append('token', sessionStorage.getItem('token'));
-            bodyFormData_.append('id_amigo', a);
-            let urlC_ = Apiurl + "/usuario/amigo";
-            axios({
-                method: "post",
-                url: urlC_,
-                data: bodyFormData_,
-                headers: { "Content-Type": "multipart/form-data" },
-                onUploadProgress: p => {
-                    tastRegistrando("Procesando...");
-                }
-            }).then(function (response) {
-                //handle success
-                //console.log(response.data.status);
+        bodyFormData_.append('token', sessionStorage.getItem('token'));
+        bodyFormData_.append('id_amigo', a);
+        let urlC_ = Apiurl + "/usuario/amigo";
+        axios({
+            method: "post",
+            url: urlC_,
+            data: bodyFormData_,
+            headers: { "Content-Type": "multipart/form-data" },
+            onUploadProgress: p => {
+                tastRegistrando("Procesando...");
+            }
+        }).then(function (response) {
+            //handle success
+            //console.log(response.data.status);
+            toast.dismiss();
+            if (response.data.status == 200) { // todo correcto
+                tastSuccess("Tienes un nuevo amigo.");
+                getMsgAmigos();
+            } else {
                 toast.dismiss();
-                if (response.data.status == 200) { // todo correcto
-                    tastSuccess("Tienes un nuevo amigo.");
-                    getMsgAmigos();
-                } else {
-                    toast.dismiss();
-                    tastError("Error 404");
-                }
-            }).catch(function (response) {
-                //handle error
-                toast.dismiss();
-                tastError(String(response));
-            });
+                tastError("Error 404");
+            }
+        }).catch(function (response) {
+            //handle error
+            toast.dismiss();
+            tastError(String(response));
+        });
     }
-
-    const data = [
-        ["Joe James", "Test Corp", "Yonkers", "NY"],
-        ["John Walsh", "Test Corp", "Hartford", "CT"],
-        ["Bob Herm", "Test Corp", "Tampa", "FL"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX1"],
-        ["James Houston", "Test Corp", "Dallas", "T2"],
-        ["James Houston", "Test Corp", "Dallas", "TX2"],
-        ["James Houston", "Test Corp", "Dallas", "TX3"],
-        ["James Houston", "Test Corp", "Dallas", "TX4"],
-        ["James Houston", "Test Corp", "Dallas", "TX5"],
-        ["James Houston", "Test Corp", "Dallas", "TX6"],
-        ["James Houston", "Test Corp", "Dallas", "TX7"],
-        ["James Houston", "Test Corp", "Dallas", "TX8"],
-        ["James Houston", "Test Corp", "Dallas", "TX9"],
-        ["James Houston", "Test Corp", "Dallas", "TX10"],
-    ];
 
     const options = {
         filterType: 'dropdown',
@@ -846,12 +822,49 @@ export default function MyDrivePage() {
         }
     };
 
-    //(String(item.fecha_nac).split('T'))[0]
     useEffect(() => {
         getMsgAmigos();
     }, [])
 
     function d(asd) {
+        var newArray = [];
+        for (var i = 0; i < asd.length; i++) {
+            if (asd[i] === undefined) {
+
+            } else {
+                newArray.push(asd[i]);
+            }
+        }
+        return newArray;
+    }
+
+    /**
+     * Visualizacion de archivos publicos de amigos
+     */
+
+    function cerrarModalVisualizacion() {
+        setVisualizacionModal(false);
+    }
+
+    const [msgVisualizacion, setMsgVisualizacion] = useState([]);
+
+    const getMsgVisualizacion = async () => {
+
+    }
+
+    useEffect(() => {
+        getMsgVisualizacion();
+    }, [])
+
+    const columns_ = [
+
+    ];
+
+    const options_ = {
+
+    };
+
+    function d_(asd) {
         var newArray = [];
         for (var i = 0; i < asd.length; i++) {
             if (asd[i] === undefined) {
@@ -891,6 +904,7 @@ export default function MyDrivePage() {
 
                                         <DropdownItem onClick={() => setSubirArchivoModal(true)} > <MdFileUpload className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Subir archivo</DropdownItem>
                                         <DropdownItem onClick={() => setAgregarAmigoModal(true)} > <MdPersonAdd className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Agregar amigo</DropdownItem>
+                                        <DropdownItem onClick={() => setVisualizacionModal(true)} > <MdShare className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Ver archivos publicos</DropdownItem>
 
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
@@ -1313,14 +1327,13 @@ export default function MyDrivePage() {
                 {/* End Eliminar Archivo Modal */}
 
                 {/* Start Agregar Amigos Modal */}
-                {/**style={{"-webkit-transform": "translate(0, 16%)", transform: "translate(0,16%)"}} */}
                 <Modal isOpen={agregarAmigoModal} toggle={cerrarModalAgregarAmigo} size="lg" >
                     <ModalHeader className="justify-content-center" toggle={cerrarModalAgregarAmigo}>
-                        <h3 className="mb-0" style={{color:"black"}}>Agregar Amigos</h3>
+                        <h3 className="mb-0" style={{ color: "black" }}>Agregar Amigos</h3>
                     </ModalHeader>
-                    <ModalBody style={{padding:"0px"}}>
+                    <ModalBody style={{ padding: "0px" }}>
                         <MUIDataTable
-                            title={"Employee List"}
+                            title={"Usuarios"}
                             data={d(msgAmigos)}
                             columns={columns}
                             options={options}
@@ -1329,36 +1342,21 @@ export default function MyDrivePage() {
                 </Modal>
                 {/* End Agregar Amigos Modal */}
 
-                {/* Sart Demo Modal 
-                <Modal isOpen={agregarAmigoModal} toggle={cerrarModalAgregarAmigo}>
-                    <div className="modal-header justify-content-center">
-                        <button className="close" onClick={cerrarModalAgregarAmigo}>
-                            <i className="tim-icons icon-simple-remove" />
-                        </button>
-                        <h4 className="title title-up">Modal title</h4>
-                    </div>
-                    <div className="modal-body">
-                        <MUIDataTable
-                            title={"Employee List"}
-                            data={data}
-                            columns={columns}
-                            options={options}
+                {/* Start Visualizacion Modal */}
+                <Modal isOpen={visualizacionModal} toggle={cerrarModalVisualizacion} size="lg" >
+                    <ModalHeader className="justify-content-center" toggle={cerrarModalVisualizacion}>
+                        <h3 className="mb-0" style={{ color: "black" }}>Archivos publicos de mis amigos</h3>
+                    </ModalHeader>
+                    <ModalBody style={{ padding: "0px" }}>
+                    <MUIDataTable
+                            title={"Archivos"}
+                            data={d_(msgVisualizacion)}
+                            columns={columns_}
+                            options={options_}
                         />
-                    </div>
-                    <div className="modal-footer">
-                        <Button color="default" type="button">
-                            Nice Button
-                        </Button>
-                        <Button
-                            color="danger"
-                            type="button"
-                            onClick={cerrarModalAgregarAmigo}
-                        >
-                            Close
-                        </Button>
-                    </div>
+                    </ModalBody>
                 </Modal>
-                 End Demo Modal */}
+                {/* End Visualizacion Modal */}
 
                 <ToastContainer
                     toastStyle={{ color: "#000" }}
