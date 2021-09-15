@@ -105,11 +105,13 @@ export default function MyDrivePage() {
 
     const [passwordSubirArchvivoInput, setPasswordSubirArchvivoInput] = useState('');
     const [passwordEditarArchvivoInput, setPasswordEditarArchvivoInput] = useState('');
+    const [passwordEliminarArchvivoInput, setPasswordEliminarArchvivoInput] = useState('');
     const [archivoSeleccionadoInput, setArchivoSeleccionadoInput] = useState('');
     const [nombreArchivoInput, setNombreArchivoInput] = useState('');
     const [nombreArchivoEditarInput, setNombreArchivoEditarInput] = useState('');
     const [subirArchivoModal, setSubirArchivoModal] = React.useState(false);
     const [editarArchivoModal, setEditarArchivoModal] = React.useState(false);
+    const [miniModalEliminar, setMiniModalEliminar] = React.useState(false);
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
         document.documentElement.addEventListener("mousemove", followCursor);
@@ -489,6 +491,9 @@ export default function MyDrivePage() {
         setNombreArchivoEditarInput('');
         setPasswordEditarArchvivoInput('');
         setVisibility_('');
+        localStorage.removeItem("id_file");
+        localStorage.removeItem("name");
+        localStorage.removeItem("id_visibility");
         setEditarArchivoModal(false);
     }
 
@@ -586,6 +591,34 @@ export default function MyDrivePage() {
     function verArchivo(d) {
         window.open(d, '_blank');
     }
+
+    /**
+     * Eliminar un archivo
+     */
+
+    function cerrarModalEliminarArchivo() {
+        setPasswordEliminarArchvivoInput('');
+        var tipo = document.getElementById("passwordEliminarArchvivo");
+        tipo.type = "password";
+        localStorage.removeItem("id_file");
+        localStorage.removeItem("name");
+        localStorage.removeItem("id_visibility");
+        setMiniModalEliminar(false);
+    }
+
+    function eliminarArchivo() {
+        setMiniModalEliminar(true);
+    }
+
+    function mostrarContrasenaEliminar() {
+        var tipo = document.getElementById("passwordEliminarArchvivo");
+        if (tipo.type == "password") {
+            tipo.type = "text";
+        } else {
+            tipo.type = "password";
+        }
+    }
+
 
     return (
         <>
@@ -736,7 +769,7 @@ export default function MyDrivePage() {
                         <TiEdit className="copy" style={{ fontSize: "22px", marginRight: "8px", color: "black" }} />
                         Editar
                     </Item>
-                    <Item >
+                    <Item onClick={eliminarArchivo} >
                         <TiDocumentDelete className="copy" style={{ fontSize: "22px", marginRight: "8px", color: "red" }} />
                         Eliminar
                     </Item>
@@ -884,7 +917,6 @@ export default function MyDrivePage() {
                 </Modal>
                 {/* End Subir Archivo Modal */}
 
-
                 {/* Start Editar Archivo Modal */}
                 <Modal
                     modalClassName="modal-black_"
@@ -947,7 +979,6 @@ export default function MyDrivePage() {
                             <span style={{ color: "black" }}>
                                 Se necesita confirmación de contraseña para editar el archivo.
                             </span>
-
                         </FormText>
                         <Form className="form" style={{ color: "rgba(0, 0, 0, 0.8)" }}>
                             <div className="form-row">
@@ -981,6 +1012,61 @@ export default function MyDrivePage() {
                     </div>
                 </Modal>
                 {/* End Editar Archivo Modal */}
+
+                {/* Start Mini Modal */}
+                <Modal
+                    modalClassName="modal-Eliminar_"
+                    isOpen={miniModalEliminar}
+                    toggle={() => cerrarModalEliminarArchivo}
+                >
+                    <div className="modal-header justify-content-center">
+                        <button className="close" onClick={() => cerrarModalEliminarArchivo}>
+                            <i className="tim-icons icon-simple-remove text-white" />
+                        </button>
+                        <div className="modal-profile">
+                            <i className="tim-icons icon-simple-remove" />
+                        </div>
+                    </div>
+                    <div className="modal-body">
+                        <p style={{textAlign: "center"}}><span style={{color: "aliceblue"}}>Esta acción es permanente. <br/> Estas seguro de querer eliminar el archivo </span> <span style={{color: "black", fontWeight: 700}}>{localStorage.getItem("name")}</span> <span style={{color: "aliceblue"}}>? </span> </p>
+                    
+                        <FormText color="muted" style={{ marginTop: "4%", marginBottom: "4%", textAlign: "center" }}>
+                            <span style={{ color: "black", fontWeight: 600 }}>
+                                Se necesita confirmación de contraseña para eliminar el archivo.
+                            </span>
+                        </FormText>
+                        <Form className="form" style={{ color: "rgba(0, 0, 0, 0.8)" }}>
+                            <div className="form-row">
+                                <Col>
+                                    <InputGroup>
+                                        <Input placeholder="Coloca tu contraseña acá" type="password" id="passwordEliminarArchvivo"
+                                            value={passwordEliminarArchvivoInput}
+                                            onChange={event => setPasswordEliminarArchvivoInput(event.target.value)}
+                                            style={{ color: "rgba(0, 0, 0, 0.8)" }} />
+                                        <InputGroupAddon addonType="append" onClick={mostrarContrasenaEliminar} style={{ cursor: "pointer" }}>
+                                            <InputGroupText>
+                                                <FiEye className="tim-icons" style={{ color: "black" }} />
+                                            </InputGroupText>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </Col>
+                            </div>
+                        </Form>
+                    </div>
+                    
+                    <div className="modal-footer">
+                        <Button className="btn-neutral" color="primary" type="button">
+                            Eliminar
+                        </Button>
+                        <Button
+                            onClick={cerrarModalEliminarArchivo}
+                            type="button"
+                        >
+                            Cerrar
+                        </Button>
+                    </div>
+                </Modal>
+                {/* End Mini Modal */}
 
                 <ToastContainer
                     toastStyle={{ color: "#000" }}

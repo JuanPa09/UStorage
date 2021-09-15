@@ -230,6 +230,12 @@
         color: #000;
       }
     }
+
+    &.modal-Eliminar_{
+      .modal-content{
+        background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%) !important;
+    }
+  }
 }
 
 .modal-search{
@@ -265,4 +271,6 @@
 
 #passwordEditarArchvivo::placeholder { color: rgba(0, 0, 0, 0.8);}
 
-.colorCambio{ color: crimson !important}
+#passwordEliminarArchvivo::placeholder { color: black;}
+
+.colorCambio { color: crimson !important; }
