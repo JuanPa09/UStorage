@@ -13,10 +13,15 @@ const archivoService = require('../service/archivo.service');
 exports.getUsers = async (req, res, next) => {
     const myToken = req.query.token
     try {
-        sql.query(`select u.id_user, u.username, u.image_url, count(fs.id_user) as cantidad from User u, Files fs, File f, Friends fr Where
+        /**
+         * `select u.id_user, u.username, u.image_url, count(fs.id_user) as cantidad from User u, Files fs, File f, Friends fr Where
         u.id_user = fs.id_user and fs.id_file = f.id_file and f.id_visibility = 1 and u.token != '${myToken}' and 
-        u.id_user not in (select fr.id_user2 from Friends fr, User u  where u.token = '${myToken}' and u.id_user = fr.id_user1 )  group by u.username, u.id_user, u.image_url;
-        `, (err, result) => {
+        u.id_user not in (select fr.id_user2 from Friends fr, User u  where u.token = '${myToken}' and u.id_user = fr.id_user1 )  group by u.username, u.id_user, u.image_url;`
+         */
+        sql.query(`select u.id_user, u.username, u.image_url, count(f.id_file) as cantidad, f.id_visibility from User u
+        left join Files fl on fl.id_user = u.id_user
+        left join File f on fl.id_file = f.id_file and f.id_visibility !=  2
+        where u.token != '${myToken} group by u.id_user;`, (err, result) => {
             if (err) throw err;
 
 

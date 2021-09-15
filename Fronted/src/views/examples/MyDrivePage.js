@@ -28,7 +28,7 @@ import {
     PopoverHeader,
     Modal,
     FormText,
-    ModalHeader, 
+    ModalHeader,
     ModalBody
 } from "reactstrap";
 
@@ -117,15 +117,19 @@ export default function MyDrivePage() {
     const [editarArchivoModal, setEditarArchivoModal] = React.useState(false);
     const [miniModalEliminar, setMiniModalEliminar] = React.useState(false);
     const [agregarAmigoModal, setAgregarAmigoModal] = React.useState(false);
+
+
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
-        document.documentElement.addEventListener("mousemove", followCursor);
+        //document.documentElement.addEventListener("mousemove", followCursor);
         // Specify how to clean up after this effect:
-        return function cleanup() {
-            document.body.classList.toggle("register-page");
-            document.documentElement.removeEventListener("mousemove", followCursor);
-        };
+        /* return function cleanup() {
+             document.body.classList.toggle("register-page");
+             document.documentElement.removeEventListener("mousemove", followCursor);
+         };*/
     }, []);
+
+
     const followCursor = (event) => {
         let posX = event.clientX - window.innerWidth / 2;
         let posY = event.clientY - window.innerWidth / 6;
@@ -687,7 +691,7 @@ export default function MyDrivePage() {
      * Agregar amigo
      */
 
-     function cerrarModalAgregarAmigo() {
+    function cerrarModalAgregarAmigo() {
         /*setNombreArchivoEditarInput('');
         setPasswordEditarArchvivoInput('');
         setVisibility_('');
@@ -695,6 +699,104 @@ export default function MyDrivePage() {
         localStorage.removeItem("name");
         localStorage.removeItem("id_visibility");*/
         setAgregarAmigoModal(false);
+    }
+
+    const columns = [
+        {
+            name: "Name",
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: "Company",
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: "City",
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: "State",
+            options: {
+                filter: false,
+                customBodyRender: (value) => (
+
+                    <img
+                        alt="..."
+                        className="img-fluid rounded-circle shadow-lg"
+                        src={require("assets/img/mike.jpg").default}
+                        style={{ width: "64px", padding: "0px" }}
+                    />
+                )
+            }
+        }
+    ];
+
+    const data = [
+        ["Joe James", "Test Corp", "Yonkers", "NY"],
+        ["John Walsh", "Test Corp", "Hartford", "CT"],
+        ["Bob Herm", "Test Corp", "Tampa", "FL"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX1"],
+        ["James Houston", "Test Corp", "Dallas", "T2"],
+        ["James Houston", "Test Corp", "Dallas", "TX2"],
+        ["James Houston", "Test Corp", "Dallas", "TX3"],
+        ["James Houston", "Test Corp", "Dallas", "TX4"],
+        ["James Houston", "Test Corp", "Dallas", "TX5"],
+        ["James Houston", "Test Corp", "Dallas", "TX6"],
+        ["James Houston", "Test Corp", "Dallas", "TX7"],
+        ["James Houston", "Test Corp", "Dallas", "TX8"],
+        ["James Houston", "Test Corp", "Dallas", "TX9"],
+        ["James Houston", "Test Corp", "Dallas", "TX10"],
+    ];
+
+    const options = {
+        filterType: 'dropdown',
+        responsive: 'stacked',
+        rowsPerPage: 2,
+        page: 0,
+        selectableRows: false
+    };
+
+    const [msgAmigos, setMsgAmigos] = useState([]);
+
+    const getMsgAmigos = async () => {
+        try {
+            let url = Apiurl + "/usuario/getUsers?token="+sessionStorage.getItem('token');
+            await axios.get(url).then(data => {
+                console.log(data);
+                const result = [];
+                data.data.forEach(item => {
+                    console.log(item);
+                    //result[item.id_usuario] = [item.username, item.nombre, item.apellido, (String(item.fecha_nac).split('T'))[0], item.id_usuario];
+                });
+                msgAmigos(result);
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getMsgAmigos();
+    }, [])
+
+    function d(asd) {
+        var newArray = [];
+        for (var i = 0; i < asd.length; i++) {
+            if (asd[i] === undefined) {
+
+            } else {
+                newArray.push(asd[i]);
+            }
+        }
+        return newArray;
     }
 
     return (
@@ -1147,15 +1249,52 @@ export default function MyDrivePage() {
                 {/* End Eliminar Archivo Modal */}
 
                 {/* Start Agregar Amigos Modal */}
-                <Modal isOpen={agregarAmigoModal} toggle={cerrarModalAgregarAmigo} size="lg">
+                {/**style={{"-webkit-transform": "translate(0, 16%)", transform: "translate(0,16%)"}} */}
+                <Modal isOpen={agregarAmigoModal} toggle={cerrarModalAgregarAmigo} size="lg" >
                     <ModalHeader className="justify-content-center" toggle={cerrarModalAgregarAmigo}>
                         Large modal
                     </ModalHeader>
                     <ModalBody>
-
+                        <MUIDataTable
+                            title={"Employee List"}
+                            data={d(msgAmigos)}
+                            columns={columns}
+                            options={options}
+                        />
                     </ModalBody>
                 </Modal>
                 {/* End Agregar Amigos Modal */}
+
+                {/* Sart Demo Modal 
+                <Modal isOpen={agregarAmigoModal} toggle={cerrarModalAgregarAmigo}>
+                    <div className="modal-header justify-content-center">
+                        <button className="close" onClick={cerrarModalAgregarAmigo}>
+                            <i className="tim-icons icon-simple-remove" />
+                        </button>
+                        <h4 className="title title-up">Modal title</h4>
+                    </div>
+                    <div className="modal-body">
+                        <MUIDataTable
+                            title={"Employee List"}
+                            data={data}
+                            columns={columns}
+                            options={options}
+                        />
+                    </div>
+                    <div className="modal-footer">
+                        <Button color="default" type="button">
+                            Nice Button
+                        </Button>
+                        <Button
+                            color="danger"
+                            type="button"
+                            onClick={cerrarModalAgregarAmigo}
+                        >
+                            Close
+                        </Button>
+                    </div>
+                </Modal>
+                 End Demo Modal */}
 
                 <ToastContainer
                     toastStyle={{ color: "#000" }}
