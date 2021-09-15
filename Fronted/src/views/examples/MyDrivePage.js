@@ -374,7 +374,36 @@ export default function MyDrivePage() {
         }
         bodyFormData.append('visibility', tipoArchivo);
         bodyFormData.append('image', file);
+        let url = Apiurl + "/usuario/archivo/nuevo";
+        axios({
+            method: "post",
+            url: url,
+            data: bodyFormData,
+            headers: { "Content-Type": "multipart/form-data" }
+        }).then(function (response) {
+            //handle success
+            cerrarModalSubirArchivo();
+            toast.dismiss();
+            tastSuccess("Se ha subido un elemento.");
+            // llamar a traer archivos
+        }).catch(function (response) {
+            //handle error
+            toast.dismiss();
+            tastError(String(response));
+        });
     }
+
+    function tastSuccess(message) {
+        toast.success(message, {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
+        });
+      }
 
     function tastRegistrando(message) {
         toast.info(message, {
