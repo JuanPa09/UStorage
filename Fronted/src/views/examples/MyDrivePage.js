@@ -52,6 +52,7 @@ import { FcPlus } from "react-icons/fc";
 import { FiEye } from "react-icons/fi";
 import { MdFileUpload } from "react-icons/md";
 import { ImFolder, ImImage, ImFilePdf, ImFileText2 } from "react-icons/im";
+import { TiFolderDelete, TiDocumentDelete, TiEdit, TiExportOutline, TiFolderOpen } from "react-icons/ti";
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 //import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 //import { FaRegCopy, FaList, FaEllipsisV, FaShareAlt } from 'react-icons/fa'
@@ -85,6 +86,7 @@ function ocultar() {
 
 const MENU_ID = "menu-id";
 const ARCHIVO_ID = "archivo-id";
+const ARCHIVOMENU_ID = "archivom-id";
 
 export default function MyDrivePage() {
     const [squares1to6, setSquares1to6] = React.useState("");
@@ -459,13 +461,29 @@ export default function MyDrivePage() {
         getMsg();
     }, [])
 
+    function menuCOntextualGeneral(e) {
+        if (e.target.localName == "div" && e.target.parentNode.id == "contenedorDeArchivos") {
+            show(e, { id: 'menu-id' })
+        } else {
+            
+        }
+    }
+
+    function menuCOntextualFiles(e) {
+        //localStorage.setItem("fileName", n);
+        //localStorage.setItem("fileId", id_);
+        //localStorage.setItem("directorioActualMove", id_directorio);
+        show(e, { id: 'archivom-id' });
+        //getDirs();
+    }
+
     return (
         <>
             <UStorageNavbar />
             <div className="wrapper">
                 <div className="page-header" style={styles.pageHeader}>
                     <div className="page-header-image" />
-                    <div className="content" style={styles.contentOfPage}>
+                    <div className="content" style={styles.contentOfPage} >
 
                         <Row style={styles.rowOfPage}>
                             <Col xs="2">
@@ -491,11 +509,11 @@ export default function MyDrivePage() {
                                 </UncontrolledDropdown>
                             </Col>
 
-                            <Col xs="5" style={styles.centerGrid} onClick={activateLasers} onMouseMove={ocultar} onContextMenu={e => menuCOntextual(e)}>
+                            <Col xs="5" style={styles.centerGrid} onContextMenu={e => menuCOntextualGeneral(e)} id="contenedorDeArchivos">
                                 <h2 style={styles.lefth1}> <i className="tim-icons icon-laptop" style={styles.iconh1} /> Publicos</h2>
 
 
-                                <div style={styles.rowOfPage} >
+                                <div style={styles.rowOfPage} id="contenedorDeArchivos">
                                     <Row style={{ marginLeft: "0" }}>
                                         {
                                             msg.map(message => {
@@ -514,7 +532,7 @@ export default function MyDrivePage() {
                                                             marginRight: "0.5rem",
                                                             cursor: "pointer"
                                                         }}
-                                                        >
+                                                        onContextMenu={event => menuCOntextualFiles(event)}>
                                                             {(message.id_file_type == 1) ?
                                                                 <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
                                                                 :
@@ -533,11 +551,11 @@ export default function MyDrivePage() {
 
 
                             </Col>
-                            <Col xs="5" style={styles.leftGrid}>
+                            <Col xs="5" style={styles.leftGrid} onContextMenu={e => menuCOntextualGeneral(e)} id="contenedorDeArchivos">
                                 <h2 style={styles.lefth1}> <i className="tim-icons icon-lock-circle" style={styles.iconh1} /> Privados</h2>
 
 
-                                <div style={styles.rowOfPage} >
+                                <div style={styles.rowOfPage} id="contenedorDeArchivos">
                                     <Row style={{ marginLeft: "0" }}>
                                         {
                                             msg.map(message => {
@@ -556,7 +574,7 @@ export default function MyDrivePage() {
                                                             marginRight: "0.5rem",
                                                             cursor: "pointer"
                                                         }}
-                                                        >
+                                                        onContextMenu={event => menuCOntextualFiles(event)}>
                                                             {(message.id_file_type == 1) ?
                                                                 <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
                                                                 :
@@ -601,7 +619,16 @@ export default function MyDrivePage() {
                         <Item onClick={handleItemClick}>Sub Item 2</Item>
                     </Submenu>
                 </Menu>
-
+                <Menu id={ARCHIVOMENU_ID}>
+                    <Item >
+                        <TiEdit className="copy" style={{ fontSize: "22px", marginRight: "8px", color: "navy" }} />
+                        Editar nombre de archivo
+                    </Item>
+                    <Item >
+                        <TiDocumentDelete className="copy" style={{ fontSize: "22px", marginRight: "8px", color: "red" }} />
+                        Eliminar archivo
+                    </Item>
+                </Menu>
                 {/* Sart Demo Modal */}
                 <Modal isOpen={demoModal} toggle={cerrarModal}>
                     <div className="modal-header justify-content-center">
