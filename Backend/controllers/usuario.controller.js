@@ -21,7 +21,7 @@ exports.getUsers = async (req, res, next) => {
         sql.query(`select u.id_user, u.username, u.image_url, count(f.id_file) as cantidad, f.id_visibility from User u
         left join Files fl on fl.id_user = u.id_user
         left join File f on fl.id_file = f.id_file and f.id_visibility !=  2
-        where u.token != '${myToken} group by u.id_user;`, (err, result) => {
+        where u.token != '${myToken}' group by u.id_user;`, (err, result) => {
             if (err) throw err;
 
 

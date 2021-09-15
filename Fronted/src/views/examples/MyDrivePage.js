@@ -703,39 +703,50 @@ export default function MyDrivePage() {
 
     const columns = [
         {
-            name: "Name",
-            options: {
-                filter: true
-            }
-        },
-        {
-            name: "Company",
-            options: {
-                filter: true
-            }
-        },
-        {
-            name: "City",
-            options: {
-                filter: true
-            }
-        },
-        {
-            name: "State",
+            name: "Foto de perfil",
             options: {
                 filter: false,
                 customBodyRender: (value) => (
-
                     <img
                         alt="..."
-                        className="img-fluid rounded-circle shadow-lg"
-                        src={require("assets/img/mike.jpg").default}
-                        style={{ width: "64px", padding: "0px" }}
+                        className="img-fluid rounded shadow-lg"
+                        src={value}
+                        style={{ width: "84px", padding: "0px" }}
                     />
+                )
+            }
+        },
+        {
+            name: "Nombre de usuario",
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: "Archivos publicos",
+            options: {
+                filter: true,
+                customBodyRender: (value) => (
+                    (value == 0) ? "No tiene archivos publicos" : "Tiene " + value + " archivo(s) publico(s)"
+                )
+            }
+        },
+        {
+            name: "Acción",
+            options: {
+                filter: false,
+                customBodyRender: (value) => (
+                    <Button color="info" onClick={event => agrAmigo(value)}>
+                        <i className="tim-icons icon-gift-2" /> Agregar
+                    </Button>
                 )
             }
         }
     ];
+
+    function agrAmigo(a) {
+        console.log(a);
+    }
 
     const data = [
         ["Joe James", "Test Corp", "Yonkers", "NY"],
@@ -760,22 +771,47 @@ export default function MyDrivePage() {
         responsive: 'stacked',
         rowsPerPage: 2,
         page: 0,
-        selectableRows: false
+        selectableRows: false,
+        textLabels: {
+            body: {
+                noMatch: "Lo sentimos, no se encontraron usuarios coincidentes",
+                toolTip: "Ordenar",
+                columnHeaderTooltip: column => `Ordenar por ${column.label}`
+            },
+            pagination: {
+                next: "Siguiente página",
+                previous: "Página anterior",
+                rowsPerPage: "Usuarios por página:",
+                displayRows: "of",
+            },
+            toolbar: {
+                search: "Buscar",
+                downloadCsv: "Descargar CSV",
+                print: "Imprimir",
+                viewColumns: "Ver columnas",
+                filterTable: "Tabla de filtros",
+            },
+            filter: {
+                all: "Todos",
+                title: "FILTROS",
+                reset: "REINICIAR",
+            }
+        }
     };
 
     const [msgAmigos, setMsgAmigos] = useState([]);
 
     const getMsgAmigos = async () => {
         try {
-            let url = Apiurl + "/usuario/getUsers?token="+sessionStorage.getItem('token');
+            let url = Apiurl + "/usuario/getUsers?token=" + sessionStorage.getItem('token');
             await axios.get(url).then(data => {
-                console.log(data);
+                //console.log(data);
                 const result = [];
                 data.data.forEach(item => {
-                    console.log(item);
-                    //result[item.id_usuario] = [item.username, item.nombre, item.apellido, (String(item.fecha_nac).split('T'))[0], item.id_usuario];
+                    //console.log(item);
+                    result[item.id] = [item.image_url, item.username, item.cantidad, item.id];
                 });
-                msgAmigos(result);
+                setMsgAmigos(result);
             });
         }
         catch (err) {
@@ -783,6 +819,7 @@ export default function MyDrivePage() {
         }
     };
 
+    //(String(item.fecha_nac).split('T'))[0]
     useEffect(() => {
         getMsgAmigos();
     }, [])
@@ -1252,9 +1289,9 @@ export default function MyDrivePage() {
                 {/**style={{"-webkit-transform": "translate(0, 16%)", transform: "translate(0,16%)"}} */}
                 <Modal isOpen={agregarAmigoModal} toggle={cerrarModalAgregarAmigo} size="lg" >
                     <ModalHeader className="justify-content-center" toggle={cerrarModalAgregarAmigo}>
-                        Large modal
+                        <h3 className="mb-0" style={{color:"black"}}>Agregar Amigos</h3>
                     </ModalHeader>
-                    <ModalBody>
+                    <ModalBody style={{padding:"0px"}}>
                         <MUIDataTable
                             title={"Employee List"}
                             data={d(msgAmigos)}
