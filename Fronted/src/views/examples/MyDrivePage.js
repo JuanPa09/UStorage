@@ -103,6 +103,9 @@ export default function MyDrivePage() {
     const { show } = useContextMenu({ id: MENU_ID });
     const [demoModal, setDemoModal] = React.useState(false);
     const [carpetaInput, setCarpetaInput] = useState('');
+    const [passwordSubirArchvivoInput, setPasswordSubirArchvivoInput] = useState('');
+    const [archivoSeleccionadoInput, setArchivoSeleccionadoInput] = useState('');
+    const [nombreArchivoInput, setNombreArchivoInput] = useState('');
     const [subirArchivoModal, setSubirArchivoModal] = React.useState(false);
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
@@ -265,9 +268,11 @@ export default function MyDrivePage() {
     }
 
     function upArchivo(e) {
-        console.log(e);
+        //console.log(e);
         //console.log(document.getElementById('upload').files[0].name);
-        let archivo = document.getElementById('file').value;
+        let archivo = document.getElementById('file').files[0].name;
+        setArchivoSeleccionadoInput(archivo);
+        //alert(archivo);
         //console.log(FixPath(archivo));
         //let archivo = document.getElementById("file").files[0].path;
         //console.log(archivo);
@@ -286,6 +291,10 @@ export default function MyDrivePage() {
         }*/
     }
 
+    function seleccionarArchivo() {
+        document.getElementById('file').click();
+    }
+
     function mostrarContrasena() {
         var tipo = document.getElementById("passwordSubirArchvivo");
         if (tipo.type == "password") {
@@ -293,6 +302,43 @@ export default function MyDrivePage() {
         } else {
             tipo.type = "password";
         }
+    }
+
+    function validarSubirArchivo() {
+        var tipoArchivo = "";
+        var radios = document.getElementsByName('tipoArchivo');
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) {
+                tipoArchivo = radios[i].value;
+                break;
+            }
+        }
+        //alert(tipoArchivo);
+        if (archivoSeleccionadoInput == '') {
+            toastWarning("Selecciona un archivo para subir.");
+        } else if (passwordSubirArchvivoInput == '') {
+            //toast.dismiss();
+            toastWarning("Debes colocar tu contraseña para subir el archivo.");
+        } else{
+            //archivoSeleccionadoInput
+            //nombreArchivoInput
+
+            alert("Guardar");
+        }
+
+        
+    }
+
+    function toastWarning(mensaje) {
+        toast.warning(mensaje, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
 
     return (
@@ -417,10 +463,15 @@ export default function MyDrivePage() {
                         <div className="text-muted text-center ml-auto mr-auto">
                             <h3 className="mb-0">Subir Archivo</h3>
                         </div>
+                        <input type="file" id="file" style={{ width: "100%", display: "none" }}
+                            onChange={(event) => {
+                                upArchivo(event)
+                            }}
+                        ></input>
                     </div>
                     <div className="modal-body">
                         <div className="btn-wrapper text-center" style={{ marginBottom: "2%" }}>
-                            <Button color="warning">
+                            <Button color="warning" onClick={seleccionarArchivo}>
                                 Seleccionar Archivo
                             </Button>
                         </div>
@@ -429,7 +480,10 @@ export default function MyDrivePage() {
                                 <Col>
                                     <fieldset disabled >
                                         <Label for="disabled" style={{ marginBottom: "0px" }}>Archivo Seleccionado</Label>
-                                        <Input type="text" id="disabled" />
+                                        <Input type="text" id="disabled"
+                                            style={{ color: "#fff" }}
+                                            value={archivoSeleccionadoInput}
+                                            onChange={event => setArchivoSeleccionadoInput(event.target.value)} />
                                     </fieldset>
                                 </Col>
                             </div>
@@ -440,7 +494,9 @@ export default function MyDrivePage() {
                                 <Col>
                                     <fieldset >
                                         <Label for="disabled" style={{ marginBottom: "0px" }}>Nombre Archivo</Label>
-                                        <Input type="text" />
+                                        <Input type="text"
+                                        value={nombreArchivoInput}
+                                        onChange={event => setNombreArchivoInput(event.target.value)} />
                                     </fieldset>
                                 </Col>
                                 <Col>
@@ -449,9 +505,9 @@ export default function MyDrivePage() {
                                         <Label check>
                                             <Input
                                                 defaultValue="option1"
-                                                id="exampleRadios1"
-                                                name="exampleRadios"
+                                                name="tipoArchivo"
                                                 type="radio"
+                                                value="publico"
                                             />
                                             <span className="form-check-sign" />
                                             Publico
@@ -460,9 +516,9 @@ export default function MyDrivePage() {
                                             <Input
                                                 defaultChecked
                                                 defaultValue="option2"
-                                                id="exampleRadios1"
-                                                name="exampleRadios"
+                                                name="tipoArchivo"
                                                 type="radio"
+                                                value="privado"
                                             />
                                             <span className="form-check-sign" />
                                             Privado
@@ -478,11 +534,12 @@ export default function MyDrivePage() {
                             <div className="form-row">
                                 <Col>
                                     <InputGroup>
-                                        <Input placeholder="Coloca tu contraseña acá" type="password" id="passwordSubirArchvivo" />
+                                        <Input placeholder="Coloca tu contraseña acá" type="password" id="passwordSubirArchvivo"
+                                            value={passwordSubirArchvivoInput}
+                                            onChange={event => setPasswordSubirArchvivoInput(event.target.value)} />
                                         <InputGroupAddon addonType="append" onClick={mostrarContrasena} style={{ cursor: "pointer" }}>
                                             <InputGroupText>
-                                                <FiEye className="tim-icons"  />
-                                                
+                                                <FiEye className="tim-icons" />
                                             </InputGroupText>
                                         </InputGroupAddon>
                                     </InputGroup>
@@ -491,13 +548,13 @@ export default function MyDrivePage() {
                         </Form>
                     </div>
                     <div className="modal-footer">
-                        <Button color="info" type="button">
+                        <Button color="info" type="button" onClick={validarSubirArchivo}>
                             Cargar
                         </Button>
                         <Button
                             color="danger"
                             type="button"
-                            onClick={() => setDemoModal(false)}
+                            onClick={() => setSubirArchivoModal(false)}
                         >
                             Cancelar
                         </Button>
@@ -507,15 +564,7 @@ export default function MyDrivePage() {
 
 
                 <ToastContainer
-                    position="top-right"
-                    autoClose={4000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
+                    toastStyle={{ color: "#000" }}
                 />
                 <Footer />
             </div>
