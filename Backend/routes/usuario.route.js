@@ -14,6 +14,7 @@ router.use('/archivo',archivoRouter)
 router.get('/getUsers',usuarioController.getUsers);
 router.post('/registrar',usuarioController.signin);
 router.get('/ingresar',usuarioController.login);
+router.post('/verificarPass',usuarioController.verificarPass);
 router.post('/amigo',usuarioController.addFriend);
 
 

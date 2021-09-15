@@ -49,6 +49,7 @@ import { version } from "nouislider";
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Apiurl } from './../../service/apirest';
 import { FcPlus } from "react-icons/fc";
 import { FiEye } from "react-icons/fi";
 import { MdFileUpload } from "react-icons/md";
