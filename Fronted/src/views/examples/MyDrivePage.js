@@ -450,7 +450,7 @@ export default function MyDrivePage() {
         try {
             let url = Apiurl + "/usuario/archivo/mios" + "?" + "token=" + sessionStorage.getItem('token');
             const { data } = await axios.get(url);
-            setMsg(data.datos.map(Item => ({ id_file_type: Item.id_file_type, id_visibility: Item.id_visibility, link: Item.link, name: Item.name })))
+            setMsg(data.datos.map(Item => ({ id_file_type: Item.id_file_type, id_visibility: Item.id_visibility, link: Item.link, name: Item.name, id_file: Item.id_file })))
         }
         catch (err) {
             console.log(err);
@@ -469,8 +469,8 @@ export default function MyDrivePage() {
         }
     }
 
-    function menuCOntextualFiles(e) {
-        //localStorage.setItem("fileName", n);
+    function menuCOntextualFiles(e, id_file) {
+        localStorage.setItem("id_file", id_file);
         //localStorage.setItem("fileId", id_);
         //localStorage.setItem("directorioActualMove", id_directorio);
         show(e, { id: 'archivom-id' });
@@ -532,7 +532,7 @@ export default function MyDrivePage() {
                                                             marginRight: "0.5rem",
                                                             cursor: "pointer"
                                                         }}
-                                                        onContextMenu={event => menuCOntextualFiles(event)}>
+                                                        onContextMenu={event => menuCOntextualFiles(event, message.id_file)}>
                                                             {(message.id_file_type == 1) ?
                                                                 <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
                                                                 :
@@ -574,7 +574,7 @@ export default function MyDrivePage() {
                                                             marginRight: "0.5rem",
                                                             cursor: "pointer"
                                                         }}
-                                                        onContextMenu={event => menuCOntextualFiles(event)}>
+                                                        onContextMenu={event => menuCOntextualFiles(event, message.id_file)}>
                                                             {(message.id_file_type == 1) ?
                                                                 <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
                                                                 :

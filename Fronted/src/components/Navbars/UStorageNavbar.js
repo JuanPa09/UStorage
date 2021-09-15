@@ -26,6 +26,8 @@ export default function UStorageNavbar() {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("username");
         localStorage.removeItem("image_url");
+        localStorage.removeItem("id_file");
+        window.location.href="/";
     }
 
     const [collapseOpen, setCollapseOpen] = React.useState(false);
