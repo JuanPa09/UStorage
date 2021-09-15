@@ -27,7 +27,9 @@ import {
     PopoverBody,
     PopoverHeader,
     Modal,
-    FormText
+    FormText,
+    ModalHeader, 
+    ModalBody
 } from "reactstrap";
 
 // menu contextual
@@ -38,6 +40,8 @@ import {
     Submenu,
     useContextMenu
 } from "react-contexify";
+
+import MUIDataTable from 'mui-datatables';
 
 import "react-contexify/dist/ReactContexify.css";
 // core components
@@ -112,6 +116,7 @@ export default function MyDrivePage() {
     const [subirArchivoModal, setSubirArchivoModal] = React.useState(false);
     const [editarArchivoModal, setEditarArchivoModal] = React.useState(false);
     const [miniModalEliminar, setMiniModalEliminar] = React.useState(false);
+    const [agregarAmigoModal, setAgregarAmigoModal] = React.useState(false);
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
         document.documentElement.addEventListener("mousemove", followCursor);
@@ -620,7 +625,7 @@ export default function MyDrivePage() {
         }
     }
 
-    function validarEliminarArchivo(){
+    function validarEliminarArchivo() {
         if (passwordEliminarArchvivoInput == '') {
             toastWarning("Debes colocar tu contraseña para eliminar el archivo.");
         } else {
@@ -654,7 +659,7 @@ export default function MyDrivePage() {
         }
     }
 
-    function eliminarArchivoConfirm(){
+    function eliminarArchivoConfirm() {
         let url_ = Apiurl + "/usuario/archivo/eliminar/" + localStorage.getItem("id_file");
         axios({
             method: "delete",
@@ -676,6 +681,20 @@ export default function MyDrivePage() {
             toast.dismiss();
             tastError(String(response));
         });
+    }
+
+    /**
+     * Agregar amigo
+     */
+
+     function cerrarModalAgregarAmigo() {
+        /*setNombreArchivoEditarInput('');
+        setPasswordEditarArchvivoInput('');
+        setVisibility_('');
+        localStorage.removeItem("id_file");
+        localStorage.removeItem("name");
+        localStorage.removeItem("id_visibility");*/
+        setAgregarAmigoModal(false);
     }
 
     return (
@@ -705,7 +724,7 @@ export default function MyDrivePage() {
                                     <DropdownMenu className="reset" >
 
                                         <DropdownItem onClick={() => setSubirArchivoModal(true)} > <MdFileUpload className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Subir archivo</DropdownItem>
-                                        <DropdownItem onClick={() => setSubirArchivoModal(true)} > <MdPersonAdd className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Agregar amigo</DropdownItem>
+                                        <DropdownItem onClick={() => setAgregarAmigoModal(true)} > <MdPersonAdd className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Agregar amigo</DropdownItem>
 
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
@@ -1072,7 +1091,7 @@ export default function MyDrivePage() {
                 </Modal>
                 {/* End Editar Archivo Modal */}
 
-                {/* Start Mini Modal */}
+                {/* Start Eliminar Archivo Modal */}
                 <Modal
                     modalClassName="modal-Eliminar_"
                     isOpen={miniModalEliminar}
@@ -1087,8 +1106,8 @@ export default function MyDrivePage() {
                         </div>
                     </div>
                     <div className="modal-body">
-                        <p style={{textAlign: "center"}}><span style={{color: "aliceblue"}}>Esta acción es permanente. <br/> Estas seguro de querer eliminar el archivo </span> <span style={{color: "black", fontWeight: 700}}>{localStorage.getItem("name")}</span> <span style={{color: "aliceblue"}}>? </span> </p>
-                    
+                        <p style={{ textAlign: "center" }}><span style={{ color: "aliceblue" }}>Esta acción es permanente. <br /> Estas seguro de querer eliminar el archivo </span> <span style={{ color: "black", fontWeight: 700 }}>{localStorage.getItem("name")}</span> <span style={{ color: "aliceblue" }}>? </span> </p>
+
                         <FormText color="muted" style={{ marginTop: "4%", marginBottom: "4%", textAlign: "center" }}>
                             <span style={{ color: "black", fontWeight: 600 }}>
                                 Se necesita confirmación de contraseña para eliminar el archivo.
@@ -1112,7 +1131,7 @@ export default function MyDrivePage() {
                             </div>
                         </Form>
                     </div>
-                    
+
                     <div className="modal-footer">
                         <Button className="btn-neutral" color="primary" type="button" onClick={validarEliminarArchivo}>
                             Eliminar
@@ -1125,7 +1144,18 @@ export default function MyDrivePage() {
                         </Button>
                     </div>
                 </Modal>
-                {/* End Mini Modal */}
+                {/* End Eliminar Archivo Modal */}
+
+                {/* Start Agregar Amigos Modal */}
+                <Modal isOpen={agregarAmigoModal} toggle={cerrarModalAgregarAmigo} size="lg">
+                    <ModalHeader className="justify-content-center" toggle={cerrarModalAgregarAmigo}>
+                        Large modal
+                    </ModalHeader>
+                    <ModalBody>
+
+                    </ModalBody>
+                </Modal>
+                {/* End Agregar Amigos Modal */}
 
                 <ToastContainer
                     toastStyle={{ color: "#000" }}
