@@ -745,7 +745,34 @@ export default function MyDrivePage() {
     ];
 
     function agrAmigo(a) {
-        console.log(a);
+        var bodyFormData_ = new FormData();
+            bodyFormData_.append('token', sessionStorage.getItem('token'));
+            bodyFormData_.append('id_amigo', a);
+            let urlC_ = Apiurl + "/usuario/amigo";
+            axios({
+                method: "post",
+                url: urlC_,
+                data: bodyFormData_,
+                headers: { "Content-Type": "multipart/form-data" },
+                onUploadProgress: p => {
+                    tastRegistrando("Procesando...");
+                }
+            }).then(function (response) {
+                //handle success
+                //console.log(response.data.status);
+                toast.dismiss();
+                if (response.data.status == 200) { // todo correcto
+                    tastSuccess("Tienes un nuevo amigo.");
+                    getMsgAmigos();
+                } else {
+                    toast.dismiss();
+                    tastError("Error 404");
+                }
+            }).catch(function (response) {
+                //handle error
+                toast.dismiss();
+                tastError(String(response));
+            });
     }
 
     const data = [
