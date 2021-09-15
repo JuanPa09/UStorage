@@ -102,9 +102,12 @@ export default function MyDrivePage() {
     const [demoModal, setDemoModal] = React.useState(false);
     const [carpetaInput, setCarpetaInput] = useState('');
     const [passwordSubirArchvivoInput, setPasswordSubirArchvivoInput] = useState('');
+    const [passwordEditarArchvivoInput, setPasswordEditarArchvivoInput] = useState('');
     const [archivoSeleccionadoInput, setArchivoSeleccionadoInput] = useState('');
     const [nombreArchivoInput, setNombreArchivoInput] = useState('');
+    const [nombreArchivoEditarInput, setNombreArchivoEditarInput] = useState('');
     const [subirArchivoModal, setSubirArchivoModal] = React.useState(false);
+    const [editarArchivoModal, setEditarArchivoModal] = React.useState(false);
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
         document.documentElement.addEventListener("mousemove", followCursor);
@@ -465,16 +468,42 @@ export default function MyDrivePage() {
         if (e.target.localName == "div" && e.target.parentNode.id == "contenedorDeArchivos") {
             show(e, { id: 'menu-id' })
         } else {
-            
+
         }
     }
 
-    function menuCOntextualFiles(e, id_file) {
+    /**
+     * Editar archivo
+     */
+
+    function menuCOntextualFiles(e, id_file, name, id_visibility) {
         localStorage.setItem("id_file", id_file);
-        //localStorage.setItem("fileId", id_);
-        //localStorage.setItem("directorioActualMove", id_directorio);
+        localStorage.setItem("name", name);
+        localStorage.setItem("id_visibility", id_visibility);
         show(e, { id: 'archivom-id' });
-        //getDirs();
+    }
+
+    function cerrarModalEditarArchivo() {
+        setNombreArchivoEditarInput('');
+        setPasswordEditarArchvivoInput('');
+        setEditarArchivoModal(false);
+    }
+
+    function abrirModalEditarArchivo() {
+        setEditarArchivoModal(true);
+    }
+
+    function mostrarContrasenaEditar() {
+        var tipo = document.getElementById("passwordEditarArchvivo");
+        if (tipo.type == "password") {
+            tipo.type = "text";
+        } else {
+            tipo.type = "password";
+        }
+    }
+
+    function validarEditarArchivo(){
+        
     }
 
     return (
@@ -532,7 +561,7 @@ export default function MyDrivePage() {
                                                             marginRight: "0.5rem",
                                                             cursor: "pointer"
                                                         }}
-                                                        onContextMenu={event => menuCOntextualFiles(event, message.id_file)}>
+                                                            onContextMenu={event => menuCOntextualFiles(event, message.id_file, message.name, message.id_visibility)}>
                                                             {(message.id_file_type == 1) ?
                                                                 <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
                                                                 :
@@ -574,7 +603,7 @@ export default function MyDrivePage() {
                                                             marginRight: "0.5rem",
                                                             cursor: "pointer"
                                                         }}
-                                                        onContextMenu={event => menuCOntextualFiles(event, message.id_file)}>
+                                                            onContextMenu={event => menuCOntextualFiles(event, message.id_file, message.name, message.id_visibility)}>
                                                             {(message.id_file_type == 1) ?
                                                                 <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
                                                                 :
@@ -620,13 +649,13 @@ export default function MyDrivePage() {
                     </Submenu>
                 </Menu>
                 <Menu id={ARCHIVOMENU_ID}>
-                    <Item >
-                        <TiEdit className="copy" style={{ fontSize: "22px", marginRight: "8px", color: "navy" }} />
-                        Editar nombre de archivo
+                    <Item onClick={abrirModalEditarArchivo}>
+                        <TiEdit className="copy" style={{ fontSize: "22px", marginRight: "8px", color: "black" }} />
+                        Editar
                     </Item>
                     <Item >
                         <TiDocumentDelete className="copy" style={{ fontSize: "22px", marginRight: "8px", color: "red" }} />
-                        Eliminar archivo
+                        Eliminar
                     </Item>
                 </Menu>
                 {/* Sart Demo Modal */}
@@ -772,6 +801,99 @@ export default function MyDrivePage() {
                 </Modal>
                 {/* End Subir Archivo Modal */}
 
+
+                {/* Start Editar Archivo Modal */}
+                <Modal
+                    modalClassName="modal-black_"
+                    isOpen={editarArchivoModal}
+                    toggle={cerrarModalEditarArchivo}
+                >
+                    <div className="modal-header justify-content-center" >
+                        <button className="close" onClick={cerrarModalEditarArchivo}>
+                            <i className="tim-icons icon-simple-remove text-white colorCambio" />
+                        </button>
+                        <div className="text-muted text-center ml-auto mr-auto">
+                            <h3 className="mb-0">Editar Archivo</h3>
+                        </div>
+                    </div>
+                    <div className="modal-body">
+
+                        <Form className="form">
+                            <div className="form-row">
+                                <Col>
+                                    <fieldset >
+                                        <Label for="disabled" style={{ marginBottom: "0px" }}>Nombre Archivo</Label>
+                                        <Input type="text"
+                                            value={nombreArchivoEditarInput}
+                                            onChange={event => setNombreArchivoEditarInput(event.target.value)}
+                                            style={{ color: "black" }} />
+                                    </fieldset>
+                                </Col>
+                                <Col>
+                                    <Label style={{ marginBottom: "0px" }}>Tipo Archivo</Label>
+                                    <FormGroup check className="form-check-radio">
+                                        <Label check style={{ color: "black" }}>
+                                            <Input
+                                                defaultValue="option3"
+                                                name="tipoArchivoEditar"
+                                                type="radio"
+                                                value="1"
+                                            />
+                                            <span className="form-check-sign" />
+                                            Publico
+                                        </Label>
+                                        <Label check style={{ marginLeft: "12%", color: "black" }}>
+                                            <Input
+                                                defaultValue="option4"
+                                                name="tipoArchivoEditar"
+                                                type="radio"
+                                                value="2"
+                                            />
+                                            <span className="form-check-sign" />
+                                            Privado
+                                        </Label>
+                                    </FormGroup>
+                                </Col>
+                            </div>
+                        </Form>
+                        <FormText color="muted" style={{ marginTop: "4%", marginBottom: "4%" }}>
+                            <span style={{ color: "black" }}>
+                                Se necesita confirmación de contraseña para editar el archivo.
+                            </span>
+
+                        </FormText>
+                        <Form className="form" style={{ color: "rgba(0, 0, 0, 0.8)" }}>
+                            <div className="form-row">
+                                <Col>
+                                    <InputGroup>
+                                        <Input placeholder="Coloca tu contraseña acá" type="password" id="passwordEditarArchvivo"
+                                            value={passwordEditarArchvivoInput}
+                                            onChange={event => setPasswordEditarArchvivoInput(event.target.value)}
+                                            style={{ color: "rgba(0, 0, 0, 0.8)" }} />
+                                        <InputGroupAddon addonType="append" onClick={mostrarContrasenaEditar} style={{ cursor: "pointer" }}>
+                                            <InputGroupText>
+                                                <FiEye className="tim-icons" style={{ color: "black" }} />
+                                            </InputGroupText>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </Col>
+                            </div>
+                        </Form>
+                    </div>
+                    <div className="modal-footer">
+                        <Button color="info" type="button" onClick={validarEditarArchivo}>
+                            Editar
+                        </Button>
+                        <Button
+                            color="danger"
+                            type="button"
+                            onClick={cerrarModalEditarArchivo}
+                        >
+                            Cancelar
+                        </Button>
+                    </div>
+                </Modal>
+                {/* End Editar Archivo Modal */}
 
                 <ToastContainer
                     toastStyle={{ color: "#000" }}

@@ -27,6 +27,8 @@ export default function UStorageNavbar() {
         sessionStorage.removeItem("username");
         localStorage.removeItem("image_url");
         localStorage.removeItem("id_file");
+        localStorage.removeItem("name");
+        localStorage.removeItem("id_visibility");
         window.location.href="/";
     }
 

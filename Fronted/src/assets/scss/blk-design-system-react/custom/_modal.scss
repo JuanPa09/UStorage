@@ -210,6 +210,26 @@
         color: $white;
       }
     }
+
+    &.modal-black_{
+      .modal-content{
+        background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%) !important;
+        color: rgba(#000, 0.8);
+        .modal-header{
+          .modal-title, .title{
+            color: rgba(#000, 0.9);
+          }
+        }
+        .modal-body{
+          p{
+            color: rgba(#000, 0.8);
+          }
+        }
+      }
+      h1, h2, h3, h4, h5, h6, p{
+        color: #000;
+      }
+    }
 }
 
 .modal-search{
@@ -242,3 +262,7 @@
     margin: 0px 25px 20px;
   }
 }
+
+#passwordEditarArchvivo::placeholder { color: rgba(0, 0, 0, 0.8);}
+
+.colorCambio{ color: crimson !important}
