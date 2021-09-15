@@ -619,6 +619,43 @@ export default function MyDrivePage() {
         }
     }
 
+    function validarEliminarArchivo(){
+        if (passwordEliminarArchvivoInput == '') {
+            toastWarning("Debes colocar tu contraseña para eliminar el archivo.");
+        } else {
+            // verificamos password de usuario
+            var bodyFormData_ = new FormData();
+            bodyFormData_.append('token', sessionStorage.getItem('token'));
+            bodyFormData_.append('password', passwordEliminarArchvivoInput);
+            let urlC_ = Apiurl + "/usuario/verificarPass";
+            axios({
+                method: "post",
+                url: urlC_,
+                data: bodyFormData_,
+                headers: { "Content-Type": "multipart/form-data" },
+                onUploadProgress: p => {
+                    tastRegistrando("Procesando...");
+                }
+            }).then(function (response) {
+                //handle success
+                if (response.data.msg == 'correcto') { // todo correcto
+                    eliminarArchivoConfirm();
+                } else {
+                    toast.dismiss();
+                    tastError("Contraseña incorrecta.");
+                }
+            }).catch(function (response) {
+                //handle error
+                toast.dismiss();
+                tastError(String(response));
+            });
+            /////////////////////////////
+        }
+    }
+
+    function eliminarArchivoConfirm(){
+        
+    }
 
     return (
         <>
@@ -1055,7 +1092,7 @@ export default function MyDrivePage() {
                     </div>
                     
                     <div className="modal-footer">
-                        <Button className="btn-neutral" color="primary" type="button">
+                        <Button className="btn-neutral" color="primary" type="button" onClick={validarEliminarArchivo}>
                             Eliminar
                         </Button>
                         <Button
