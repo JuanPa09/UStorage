@@ -50,7 +50,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Apiurl } from './../../service/apirest';
 import { FcPlus } from "react-icons/fc";
 import { FiEye } from "react-icons/fi";
-import { MdFileUpload } from "react-icons/md";
+import { MdFileUpload, MdPersonAdd } from "react-icons/md";
 import { ImFolder, ImImage, ImFilePdf, ImFileText2 } from "react-icons/im";
 import { TiFolderDelete, TiDocumentDelete, TiEdit, TiExportOutline, TiFolderOpen } from "react-icons/ti";
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -705,6 +705,7 @@ export default function MyDrivePage() {
                                     <DropdownMenu className="reset" >
 
                                         <DropdownItem onClick={() => setSubirArchivoModal(true)} > <MdFileUpload className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Subir archivo</DropdownItem>
+                                        <DropdownItem onClick={() => setSubirArchivoModal(true)} > <MdPersonAdd className="copy" style={{ fontSize: "26px", marginRight: "8px" }} /> Agregar amigo</DropdownItem>
 
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
