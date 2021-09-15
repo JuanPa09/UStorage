@@ -268,7 +268,7 @@ export default function MyDrivePage() {
         console.log("hola");
     }
 
-    function cerrarModalSubirArchivo(){
+    function cerrarModalSubirArchivo() {
         setSubirArchivoModal(false);
         setArchivoSeleccionadoInput('');
         setPasswordSubirArchvivoInput('');
@@ -330,18 +330,73 @@ export default function MyDrivePage() {
         } else if (passwordSubirArchvivoInput == '') {
             toastWarning("Debes colocar tu contraseña para subir el archivo.");
         } else {
-            var file = document.getElementById('file').files[0];
-            var bodyFormData = new FormData();
-            bodyFormData.append('token', sessionStorage.getItem("token"));
-            if(nombreArchivoInput != ''){
-                let extension = archivoSeleccionadoInput.substring(archivoSeleccionadoInput.lastIndexOf('.'), archivoSeleccionadoInput.length);
-                bodyFormData.append('name', nombreArchivoInput+extension);
-            }else{
-                bodyFormData.append('name', archivoSeleccionadoInput);
-            }
-            bodyFormData.append('visibility', tipoArchivo);
-            bodyFormData.append('image', file);
+
+            // verificamos password de usuario
+            var bodyFormData_ = new FormData();
+            bodyFormData_.append('token', sessionStorage.getItem('token'));
+            bodyFormData_.append('password', passwordSubirArchvivoInput);
+            let urlC_ = Apiurl + "/usuario/verificarPass";
+            axios({
+                method: "post",
+                url: urlC_,
+                data: bodyFormData_,
+                headers: { "Content-Type": "multipart/form-data" },
+                onUploadProgress: p => {
+                    tastRegistrando("Procesando...");
+                }
+            }).then(function (response) {
+                //handle success
+                if (response.data.msg == 'correcto') { // todo correcto
+                    subirArchivoConfirm(tipoArchivo);
+                } else {
+                    toast.dismiss();
+                    tastError("Contraseña incorrecta.");
+                }
+                //response.data.status
+            }).catch(function (response) {
+                //handle error
+                toast.dismiss();
+                tastError(String(response));
+            });
+            /////////////////////////////
         }
+    }
+
+    function subirArchivoConfirm(tipoArchivo) {
+        var file = document.getElementById('file').files[0];
+        var bodyFormData = new FormData();
+        bodyFormData.append('token', sessionStorage.getItem("token"));
+        if (nombreArchivoInput != '') {
+            let extension = archivoSeleccionadoInput.substring(archivoSeleccionadoInput.lastIndexOf('.'), archivoSeleccionadoInput.length);
+            bodyFormData.append('name', nombreArchivoInput + extension);
+        } else {
+            bodyFormData.append('name', archivoSeleccionadoInput);
+        }
+        bodyFormData.append('visibility', tipoArchivo);
+        bodyFormData.append('image', file);
+    }
+
+    function tastRegistrando(message) {
+        toast.info(message, {
+            position: "bottom-right",
+            autoClose: false,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+        });
+    }
+
+    function tastError(message) {
+        toast.error(message, {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
 
     function toastWarning(mensaje) {
