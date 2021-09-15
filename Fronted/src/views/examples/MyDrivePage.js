@@ -101,6 +101,8 @@ export default function MyDrivePage() {
     const { show } = useContextMenu({ id: MENU_ID });
     const [demoModal, setDemoModal] = React.useState(false);
     const [carpetaInput, setCarpetaInput] = useState('');
+    const [visibility_, setVisibility_] = useState('');
+    
     const [passwordSubirArchvivoInput, setPasswordSubirArchvivoInput] = useState('');
     const [passwordEditarArchvivoInput, setPasswordEditarArchvivoInput] = useState('');
     const [archivoSeleccionadoInput, setArchivoSeleccionadoInput] = useState('');
@@ -486,10 +488,17 @@ export default function MyDrivePage() {
     function cerrarModalEditarArchivo() {
         setNombreArchivoEditarInput('');
         setPasswordEditarArchvivoInput('');
+        setVisibility_('');
         setEditarArchivoModal(false);
     }
 
     function abrirModalEditarArchivo() {
+        setNombreArchivoEditarInput(localStorage.getItem("name"));
+        if(localStorage.getItem("id_visibility") == "1"){ // publico
+            setVisibility_("1");
+        }else{ // 2 privado
+            setVisibility_("2");
+        }
         setEditarArchivoModal(true);
     }
 
@@ -503,7 +512,42 @@ export default function MyDrivePage() {
     }
 
     function validarEditarArchivo(){
-        
+        if(nombreArchivoEditarInput == ''){
+            toastWarning("Campo nombre de archivo vacio.");
+            setNombreArchivoEditarInput(localStorage.getItem("name"));
+        } else if(passwordEditarArchvivoInput == ''){
+            toastWarning("Debes colocar tu contraseña para editar el archivo.");
+        }else {
+            // verificamos password de usuario
+            var bodyFormData_ = new FormData();
+            bodyFormData_.append('token', sessionStorage.getItem('token'));
+            bodyFormData_.append('password', passwordEditarArchvivoInput);
+            let urlC_ = Apiurl + "/usuario/verificarPass";
+            axios({
+                method: "post",
+                url: urlC_,
+                data: bodyFormData_,
+                headers: { "Content-Type": "multipart/form-data" },
+                onUploadProgress: p => {
+                    tastRegistrando("Procesando...");
+                }
+            }).then(function (response) {
+                //handle success
+                if (response.data.msg == 'correcto') { // todo correcto
+                    alert("correcto");
+                    //editarArchivoConfirm(tipoArchivo);
+                } else {
+                    toast.dismiss();
+                    tastError("Contraseña incorrecta.");
+                }
+                //response.data.status
+            }).catch(function (response) {
+                //handle error
+                toast.dismiss();
+                tastError(String(response));
+            });
+            /////////////////////////////
+        }
     }
 
     return (
@@ -834,6 +878,8 @@ export default function MyDrivePage() {
                                     <FormGroup check className="form-check-radio">
                                         <Label check style={{ color: "black" }}>
                                             <Input
+                                                checked={visibility_ === '1'}
+                                                onClick={() => setVisibility_('1')}
                                                 defaultValue="option3"
                                                 name="tipoArchivoEditar"
                                                 type="radio"
@@ -844,6 +890,8 @@ export default function MyDrivePage() {
                                         </Label>
                                         <Label check style={{ marginLeft: "12%", color: "black" }}>
                                             <Input
+                                                checked={visibility_ === '2'}
+                                                onClick={() => setVisibility_('2')}
                                                 defaultValue="option4"
                                                 name="tipoArchivoEditar"
                                                 type="radio"
