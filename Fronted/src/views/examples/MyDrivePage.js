@@ -52,9 +52,9 @@ import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Apiurl } from './../../service/apirest';
-import { FcPlus } from "react-icons/fc";
+import { FcPlus, FcShare, FcUpload, FcConferenceCall } from "react-icons/fc";
 import { FiEye } from "react-icons/fi";
-import { MdFileUpload, MdPersonAdd, MdShare } from "react-icons/md";
+import { MdFileUpload, MdPersonAdd, MdShare, MdOpenInNew } from "react-icons/md";
 import { ImFolder, ImImage, ImFilePdf, ImFileText2 } from "react-icons/im";
 import { TiFolderDelete, TiDocumentDelete, TiEdit, TiExportOutline, TiFolderOpen } from "react-icons/ti";
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -731,7 +731,7 @@ export default function MyDrivePage() {
                 filter: false,
                 customBodyRender: (value) => (
                     <Button color="info" onClick={event => agrAmigo(value)}>
-                        <i className="tim-icons icon-gift-2" /> Agregar
+                        <i className="tim-icons icon-simple-add" /> Agregar
                     </Button>
                 )
             }
@@ -853,11 +853,11 @@ export default function MyDrivePage() {
             var contador = 0;
             let url = Apiurl + "/usuario/archivo/amigos?token=" + sessionStorage.getItem('token');
             await axios.get(url).then(data => {
-                console.log(data.data.datos);
+                //console.log(data.data.datos);
                 const result = [];
                 data.data.datos.forEach(item => {
-                    console.log(item);
-                    result[contador] = [item.username, item.name, item.date, item.link];
+                    //console.log(item);
+                    result[contador] = [item.username, item.name + "||" + item.id_file_type, item.date, item.link];
                     contador++;
                 });
                 setMsgVisualizacion(result);
@@ -882,7 +882,23 @@ export default function MyDrivePage() {
         {
             name: "Nombre de Archivo",
             options: {
-                filter: true
+                filter: true,
+                customBodyRender: (value) => (
+                    (value.split("||")[1] == '1') ?
+                        <span>
+                            <ImImage className="copy" style={{ fontSize: "18px", marginRight: "8px", color: "navy" }} />
+                            {value.split("||")[0]}
+                        </span>
+                        : (value.split("||")[1] == '2') ?
+                            <span>
+                                <ImFilePdf className="copy" style={{ fontSize: "18px", marginRight: "8px", color: "crimson" }} />
+                                {value.split("||")[0]}
+                            </span>
+                            : <span>
+                                <ImFileText2 className="copy" style={{ fontSize: "18px", marginRight: "8px" }} />
+                                {value.split("||")[0]}
+                            </span>
+                )
             }
         },
         {
@@ -897,7 +913,7 @@ export default function MyDrivePage() {
                 filter: false,
                 customBodyRender: (value) => (
                     <Button color="info" onClick={event => verArchivoP(value)} size="sm">
-                        <i className="tim-icons icon-gift-2" /> Ver
+                        <MdOpenInNew className="copy" style={{ fontSize: "12px", marginRight: "8px" }} /> Ver
                     </Button>
                 )
             }
@@ -949,7 +965,7 @@ export default function MyDrivePage() {
         return newArray;
     }
 
-    function verArchivoP(a){
+    function verArchivoP(a) {
         window.open(a, '_blank');
     }
 
@@ -1081,23 +1097,19 @@ export default function MyDrivePage() {
                     </Item>
                 </Menu>
                 <Menu id={MENU_ID}>
-                    <Item onClick={crearCarpeta}>
-                        <FcFolder className="copy" style={{ fontSize: "26px", marginRight: "8px" }} />
-                        Crear carpeta
+                    <Item onClick={() => setSubirArchivoModal(true)}>
+                        <FcUpload className="copy" style={{ fontSize: "26px", marginRight: "8px" }} />
+                        Subir archivo
                     </Item>
-                    <Item onClick={crearArchivo}>
-                        <FcFolder className="copy" style={{ fontSize: "26px", marginRight: "8px" }} />
-                        Crear archivo
+                    <Item onClick={() => setAgregarAmigoModal(true)}>
+                        <FcConferenceCall className="copy" style={{ fontSize: "26px", marginRight: "8px" }} />
+                        Agregar amigo
                     </Item>
                     <Separator />
-                    <Item disabled>Disabled</Item>
-                    <Separator />
-                    <Submenu label="Submenu">
-                        <Item onClick={handleItemClick}>
-                            Sub Item 1
-                        </Item>
-                        <Item onClick={handleItemClick}>Sub Item 2</Item>
-                    </Submenu>
+                    <Item onClick={() => setVisualizacionModal(true)}>
+                        <FcShare className="copy" style={{ fontSize: "26px", marginRight: "8px" }} />
+                        Ver archivos publicos
+                    </Item>
                 </Menu>
                 <Menu id={ARCHIVOMENU_ID}>
                     <Item onClick={abrirModalEditarArchivo}>
