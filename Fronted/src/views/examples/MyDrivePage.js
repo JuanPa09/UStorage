@@ -550,10 +550,6 @@ export default function MyDrivePage() {
     }
 
     function editarArchivoConfirm() {
-        //console.log(nombreArchivoEditarInput);
-        //console.log(sessionStorage.getItem("token"));
-        //console.log(visibility_);
-        //console.log(localStorage.getItem("id_file"));
         var bodyFormData = new FormData();
         bodyFormData.append('name', nombreArchivoEditarInput);
         bodyFormData.append('visibility', visibility_);
@@ -581,6 +577,14 @@ export default function MyDrivePage() {
             toast.dismiss();
             tastError(String(response));
         });
+    }
+
+    /**
+     * Ver contenido de archivos
+     */
+
+    function verArchivo(d) {
+        window.open(d, '_blank');
     }
 
     return (
@@ -638,6 +642,7 @@ export default function MyDrivePage() {
                                                             marginRight: "0.5rem",
                                                             cursor: "pointer"
                                                         }}
+                                                            onDoubleClick={event => verArchivo(message.link)}
                                                             onContextMenu={event => menuCOntextualFiles(event, message.id_file, message.name, message.id_visibility)}>
                                                             {(message.id_file_type == 1) ?
                                                                 <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
@@ -680,6 +685,7 @@ export default function MyDrivePage() {
                                                             marginRight: "0.5rem",
                                                             cursor: "pointer"
                                                         }}
+                                                            onDoubleClick={event => verArchivo(message.link)}
                                                             onContextMenu={event => menuCOntextualFiles(event, message.id_file, message.name, message.id_visibility)}>
                                                             {(message.id_file_type == 1) ?
                                                                 <ImImage className="copy" style={{ fontSize: "26px", marginRight: "8px", color: "navy" }} />
