@@ -267,6 +267,17 @@ export default function MyDrivePage() {
         console.log("hola");
     }
 
+    function cerrarModalSubirArchivo(){
+        setSubirArchivoModal(false);
+        setArchivoSeleccionadoInput('');
+        setPasswordSubirArchvivoInput('');
+        setNombreArchivoInput('');
+        var tipo = document.getElementById("passwordSubirArchvivo");
+        tipo.type = "password";
+        var inputFile = document.getElementById("file");
+        inputFile.value = '';
+    }
+
     function upArchivo(e) {
         //console.log(e);
         //console.log(document.getElementById('upload').files[0].name);
@@ -313,20 +324,23 @@ export default function MyDrivePage() {
                 break;
             }
         }
-        //alert(tipoArchivo);
         if (archivoSeleccionadoInput == '') {
             toastWarning("Selecciona un archivo para subir.");
         } else if (passwordSubirArchvivoInput == '') {
-            //toast.dismiss();
             toastWarning("Debes colocar tu contraseña para subir el archivo.");
-        } else{
-            //archivoSeleccionadoInput
-            //nombreArchivoInput
-
-            alert("Guardar");
+        } else {
+            var file = document.getElementById('file').files[0];
+            var bodyFormData = new FormData();
+            bodyFormData.append('token', sessionStorage.getItem("token"));
+            if(nombreArchivoInput != ''){
+                let extension = archivoSeleccionadoInput.substring(archivoSeleccionadoInput.lastIndexOf('.'), archivoSeleccionadoInput.length);
+                bodyFormData.append('name', nombreArchivoInput+extension);
+            }else{
+                bodyFormData.append('name', archivoSeleccionadoInput);
+            }
+            bodyFormData.append('visibility', tipoArchivo);
+            bodyFormData.append('image', file);
         }
-
-        
     }
 
     function toastWarning(mensaje) {
@@ -418,6 +432,7 @@ export default function MyDrivePage() {
                         <Item onClick={handleItemClick}>Sub Item 2</Item>
                     </Submenu>
                 </Menu>
+
                 {/* Sart Demo Modal */}
                 <Modal isOpen={demoModal} toggle={cerrarModal}>
                     <div className="modal-header justify-content-center">
@@ -449,15 +464,14 @@ export default function MyDrivePage() {
                 </Modal>
                 {/* End Demo Modal */}
 
-
                 {/* Start Subir Archivo Modal */}
                 <Modal
                     modalClassName="modal-black"
                     isOpen={subirArchivoModal}
-                    toggle={() => setSubirArchivoModal(false)}
+                    toggle={cerrarModalSubirArchivo}
                 >
                     <div className="modal-header justify-content-center">
-                        <button className="close" onClick={() => setSubirArchivoModal(false)}>
+                        <button className="close" onClick={cerrarModalSubirArchivo}>
                             <i className="tim-icons icon-simple-remove text-white" />
                         </button>
                         <div className="text-muted text-center ml-auto mr-auto">
@@ -495,8 +509,8 @@ export default function MyDrivePage() {
                                     <fieldset >
                                         <Label for="disabled" style={{ marginBottom: "0px" }}>Nombre Archivo</Label>
                                         <Input type="text"
-                                        value={nombreArchivoInput}
-                                        onChange={event => setNombreArchivoInput(event.target.value)} />
+                                            value={nombreArchivoInput}
+                                            onChange={event => setNombreArchivoInput(event.target.value)} />
                                     </fieldset>
                                 </Col>
                                 <Col>
@@ -507,7 +521,7 @@ export default function MyDrivePage() {
                                                 defaultValue="option1"
                                                 name="tipoArchivo"
                                                 type="radio"
-                                                value="publico"
+                                                value="1"
                                             />
                                             <span className="form-check-sign" />
                                             Publico
@@ -518,7 +532,7 @@ export default function MyDrivePage() {
                                                 defaultValue="option2"
                                                 name="tipoArchivo"
                                                 type="radio"
-                                                value="privado"
+                                                value="2"
                                             />
                                             <span className="form-check-sign" />
                                             Privado
@@ -554,7 +568,7 @@ export default function MyDrivePage() {
                         <Button
                             color="danger"
                             type="button"
-                            onClick={() => setSubirArchivoModal(false)}
+                            onClick={cerrarModalSubirArchivo}
                         >
                             Cancelar
                         </Button>
