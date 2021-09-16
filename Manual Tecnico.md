@@ -62,6 +62,7 @@ Para el bucket se le agrego la politica "AmazonS3FullAccess" para que tuvieramos
 #### S3
 > 1. Creamos un nuevo bucket con el nombre "archivos-15-p1"
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/BucketS3.png" /></p>
+
 > 2. Desbloqueamos todo el acceso publico para poder acceder a el desde fuera
 > 3. Creamos su respectivo usuario IAM para poder obtener las credenciales
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/politicasBucket.png" /></p>
@@ -69,23 +70,28 @@ Para el bucket se le agrego la politica "AmazonS3FullAccess" para que tuvieramos
 #### EC2
 > 1. Creamos dos maquinas virtuales identicas con sistema operativo linux
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/EC2s.png" /></p>
+
 > 2. Utilizamos los nombres "server1-15-p1" y "server2-15-p1"
 > 3. Agregamos la maquina a la vpc y le asignamos la subnet publica
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/confEC2.png" /></p>
+
 > 4. Creamos un grupo de seguridad nuevo con el puerto donde tenemos corriendo nuestro backend y se los asignamos a las 2 EC2
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/sgEC2.png" /></p>
 
 #### VPC
 > 1. Creamos una nueva VPC con el nombre "semi1vpc-15-p1"
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/VPC.png" /></p>
+
 > 2. Le agregamos "10.0.0.0/16" a la IPv4 CIDR
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/confVPC.png" /></p>
 
 #### Subnets
 > 1. Creamos dos subnets, una publica y una privada
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/subnets.png" /></p>
+
 > 2. Agregamos las subnets a nuestra VPC
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/subnetsVPC.png" /></p>
+
 > 3. Se agrego una ip publica a la subnet publica
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/subnetpubIP.png" /></p>
 
@@ -96,22 +102,27 @@ Para el bucket se le agrego la politica "AmazonS3FullAccess" para que tuvieramos
 #### Route Tables
 > 1. Se crearon dos route tables, una publica y una privada y la enlazamos a nuestra vpc
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/routetables.png" /></p>
+
 > 2. Se agregaron las respectivas subnets a cada route table
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/routetablessubnets.png" /></p>
+
 > 3. Se agrego la internet gateway a la route table publica
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/routetableinternetgateaw.png" /></p>
 
 #### RDS
 > 1. Se creo una nueva base de datos MySQL
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/RDS.png" /></p>
+
 > 2. Se agrego a la vpc y se le configuro un grupo de subnets privadas
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/RDSconf.png" /></p>
 
 #### Load Balancer
 > 1. Se creo un nuevo balanceador de carga http
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/loadbalancer.png" /></p>
+
 > 2. Se agrego a la vpc y se agregaron un par de subnets publicas de diferentes regiones
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/loadbalancervpc.png" /></p>
+
 > 3. Se creo un target group con las ec2 de nuestra vpc
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Images/loadbalancertargetgroup.png" /></p>
 
