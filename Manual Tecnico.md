@@ -1,4 +1,4 @@
-### <img align="right"  src="https://github.com/JuanPa09/UStorage/blob/main/Images/LOGOUSAC.png" width="250px"/>   Universidad San Carlos de Guatemala <br> Facultad de Ingenieria <br> Seminario De Sistemas 1 <br> Auxiliar: DIEGO ESTUARDO GÓMEZ FERNÁNDEZ 
+### <img align="right"  src="https://github.com/JuanPa09/UStorage/blob/main/Images/LOGOUSAC.png" width="250px"/>   Universidad San Carlos de Guatemala <br> Facultad de Ingenieria <br> Seminario De Sistemas 1 <br> Auxiliar: Diego Estuardo Gómez Fernández 
 > Integrantes <br> 
 > - Juan Pablo Ardón López -            201700450 <br> 
 > - Erick Sánchez -  201503878 
