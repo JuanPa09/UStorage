@@ -81,10 +81,10 @@ para crear una cuenta en el sistema.
     - si las contraseñas no coinciden, el sistema lo notificara.
     <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rccrne_.PNG" /></p>
     - Es posible ver las contraseñas dando click en los ojitos en los campos.
-    <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rojop_.PNG" /></p>
+    <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rojop_.png" /></p>
 
 - Acceso rapido a documentación del proyecto 1, regreso a la pantalla de Login o ver el código en repositorio en la parte superior o navbar en la pantalla de registro.
-<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rnvabar_.PNG" /></p>
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rnvabar_.png" /></p>
 
 - Al cumplir con los requisitos previos para crear una cuenta, damos click en el boton Empezar, el sistema notificara que se ha registrado correctamente y seguido de esto lo enviara al Login para ingresar.
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rcorrecto_.PNG" /></p>
@@ -142,7 +142,7 @@ para crear una cuenta en el sistema.
 
 - Para editar un archivo, debemos de dar click derecho sobre un archivo y se nos abrira un menu contextual, damos click en editar.
 
-<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/deditar.PNG" /></p>
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/deditar.png" /></p>
 
 - Seguido de lo anterior se nos abrira una pantalla flotante.
 
@@ -162,7 +162,7 @@ para crear una cuenta en el sistema.
 
 - Para eliminar un archivo, debemos de dar click derecho sobre un archivo y se nos abrira un menu contextual, damos click en eliminar.
 
-<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/deiminararc.PNG" /></p>
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/deiminararc.png" /></p>
 
 - Seguido de lo anterior se nos abrira una pantalla flotante.
 
@@ -194,7 +194,7 @@ para crear una cuenta en el sistema.
 
 - Ahora procedemos a agregarlo. Observemos que el contador de usuarios baja en 1, y erickace desaparece de esta lista autoamticamente. Esto implica que ya es nuestro amigo.
 
-<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/amiguis.PNG" /></p>
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/amiguis.png" /></p>
 
 <a name="f8"></a>
 
