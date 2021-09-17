@@ -97,7 +97,8 @@ y nos aparecera lo sguiente, luego colocamos la política del bucket, escrita en
 Esta política lo que hace es hacer publico nuestro bucket y que cualquier persona con la url pueda acceder a nuestra página.
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/editarpolitica.PNG" /></p>
 
-> 7. Estando en la pantalla de Editar la política del bucket bajamos y damos click en Guardar cambios.
+> 7. Estando en la pantalla de Editar la política del bucket bajamos y damos click en Guardar cambios, seguido de esto 
+se nos mostrara lo que observamos en la siguiente imagen.
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/despuesdeeditarpolitica.PNG" /></p>
 
 > 8. Luego damos click en el tab "Propiedades" ya que vamos a activar el web hosting, bajamos al final de la página estando en "Propiedades" del bucket y buscamos "Alojamiento de sitios web estáticos", damos click en editar.

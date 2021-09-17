@@ -11,18 +11,31 @@ const archivoService = require('../service/archivo.service');
  * @returns 
  */
 exports.getUsers = async (req, res, next) => {
-    const myToken = req.query.token
+    const myToken = (req.query.token).replace(" ", "+");
     try {
         /**
          * `select u.id_user, u.username, u.image_url, count(fs.id_user) as cantidad from User u, Files fs, File f, Friends fr Where
         u.id_user = fs.id_user and fs.id_file = f.id_file and f.id_visibility = 1 and u.token != '${myToken}' and 
         u.id_user not in (select fr.id_user2 from Friends fr, User u  where u.token = '${myToken}' and u.id_user = fr.id_user1 )  group by u.username, u.id_user, u.image_url;`
          */
-        sql.query(`select u.id_user, u.username, u.image_url, count(f.id_file) as cantidad, f.id_visibility from User u
+
+        /**
+         * select u.id_user, u.username, u.image_url, count(f.id_file) as cantidad, f.id_visibility from User u
         left join Files fl on fl.id_user = u.id_user
         left join File f on fl.id_file = f.id_file and f.id_visibility !=  2
-        where u.token != '${myToken}' and u.id_user not in (select fr.id_user2 from Friends fr, User u  where 
-            u.token = '${myToken}' and u.id_user = fr.id_user1 )  group by u.id_user;`, (err, result) => {
+        where u.token != '${myToken}' and u.id_user not in (select f1.id_user2 from User u1
+            left join Friends f1 on u1.id_user = f1.id_user1 
+            where u1.token = '${myToken}' 
+            union
+            select f2.id_user1 from User u2
+            left join Friends f2 on u2.id_user = f2.id_user2 
+            where u2.token = '${myToken}' )  group by u.id_user;
+         */
+        sql.query(`select u.id_user, u.username, u.image_url, count(f.id_file) as cantidad, f.id_visibility from User u
+        left join Files fl on fl.id_user = u.id_user
+        left join File f on fl.id_file = f.id_file and f.id_visibility !=  2 
+        where u.token != '${myToken}'
+        group by u.id_user;`, (err, result) => {
             if (err) throw err;
 
 
@@ -35,7 +48,36 @@ exports.getUsers = async (req, res, next) => {
                 }
                 return usuarioSchema
             })
-            res.send(usuarios)
+
+            //efectuando barrido de amigos
+            sql.query(`select f1.id_user2 from User u1
+            left join Friends f1 on u1.id_user = f1.id_user1 
+            where u1.token = '${myToken}'
+            union
+            select f2.id_user1 from User u2
+            left join Friends f2 on u2.id_user = f2.id_user2 
+            where u2.token = '${myToken}';`, (err_, result_) => {
+                if (err_) throw err_;
+                id_usuarios = result_.map((id_usuario) => {
+                    let id_usuarioSchema = {
+                        "id_": id_usuario.id_user2
+                    }
+                    return id_usuarioSchema
+                })
+
+                // si no encuentra retorna []
+                for(var j = 0; j < id_usuarios.length; j++){
+                    for (var i = 0; i < usuarios.length; i++) {
+                        if (usuarios[i].id == id_usuarios[j].id_) {
+                            usuarios.splice(i, 1)
+                            break;
+                        }
+                    }
+                }
+                
+                res.send(usuarios)
+
+            });
         })
     } catch (error) {
         return res.send({ status: 404, msg: error })
