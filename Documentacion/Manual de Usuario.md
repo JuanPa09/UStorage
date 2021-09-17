@@ -38,7 +38,7 @@ Actualmente existen diversas formas y situaciones donde se necesita e implementa
 
 - Esta es la pantalla de Login o inicio se sesión, el usuario ingrasa a su cuenta colocando su nombre de usuario o correo electronico y password.
 
-<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/Login.png" /></p>
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/login.PNG" /></p>
 
 - Cuando los campos estan vacios y el usuario intena ingresar el sistema mostrara una advertencia al respecto.
 
@@ -51,11 +51,11 @@ Actualmente existen diversas formas y situaciones donde se necesita e implementa
 - Dando Click en el ojito en el campo de contraseña se puede ocultar o mostrar la contraseña para saber si estamos colocando de manera correcta nuestro password.
 
 <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/po_.png" /></p>
-<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/pno_.PNG" /></p>
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/pno_.png" /></p>
 
 - Al dar click en el boton de crear cuenta nueva seremos trasladados a la página de registro.
 
-<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/btnre_.PNG" /></p>
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/btnre_.png" /></p>
 
 <a name="f2"></a>
 
@@ -64,12 +64,12 @@ Actualmente existen diversas formas y situaciones donde se necesita e implementa
 - Esta es la pantalla de registro de usuario, el usuario debe ingrasar nombre de usuario, correo electronico, contraseña y foto de perfil
 para crear una cuenta en el sistema.
 
-<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/registerpage_.PNG" /></p>
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/registerpage_.png" /></p>
 
 - Todos los datos descritos anteriormente son obligatorios, si el usuario decide no colocar alguno sistema mostrara una advertencia al respecto.
 
     - campo nombre de usuario vacio.
-    <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rnuv_.PNG" /></p>
+    <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rnuv_.png" /></p>
     - campo correo electronico vacio.
     <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/rcoev_.PNG" /></p>
     - campo contraseña vacio.
@@ -107,7 +107,7 @@ para crear una cuenta en el sistema.
     <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/dcontex1_.PNG" /></p>
 
     - Forma No. 2: Puedes situar el puntero del mouse en las areas de público y privado, dar click derecho y abrira un menu contextual muy intuitivo como utilizar tu sistema de archivos en tu computadora.
-    <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/dcontex2_.PNG" /></p>
+    <p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/dcontex2_.png" /></p>
 
 <a name="f4"></a>
 
