@@ -29,6 +29,8 @@
 
 ### Explicación Arquitectura Del Proyecto
 
+<p align="center"><img src="https://github.com/JuanPa09/UStorage/blob/main/Documentacion/Images/arquit.png" /></p>
+
 > 1. Lo primero que se tuvo que hacer fue crear una VPC para permitir tener todos nuestros servicios en una misma red y manejar de una mejor manera las conexiones entre cada uno de los servicios. 
 > 2. Se crearon dos tipos de subnets para la VPC. 
 >  2.1 Subnet Publica para manejar las conexiones entre cliente-servidor
